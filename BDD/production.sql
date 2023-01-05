@@ -8,10 +8,15 @@
 #------------------------------------------------------------
 
 CREATE TABLE produit(
-        id       Int  Auto_increment  NOT NULL ,
-        nom      Varchar (200) NOT NULL ,
-        quantite Int ,
-        prix     Float
+        id          Int  Auto_increment  NOT NULL ,
+        nom         Varchar (200) NOT NULL ,
+        quantite    Int ,
+        prix        Float ,
+        image       Varchar (255) ,
+        fournisseur Varchar (100) ,
+        marque      Varchar (100) ,
+        poids       Int ,
+        taille      Int
 	,CONSTRAINT produit_PK PRIMARY KEY (id)
 )ENGINE=InnoDB;
 
@@ -21,11 +26,13 @@ CREATE TABLE produit(
 #------------------------------------------------------------
 
 CREATE TABLE users(
-        mail    Varchar (150) NOT NULL ,
-        nom     Varchar (50) ,
-        prenom  Varchar (50) ,
-        pwd     Varchar (100) NOT NULL ,
-        adresse Varchar (255)
+        mail      Varchar (150) NOT NULL ,
+        nom       Varchar (50) ,
+        prenom    Varchar (50) ,
+        pwd       Varchar (100) NOT NULL ,
+        adresse   Varchar (255) ,
+        age       Int ,
+        telephone Varchar (50) NOT NULL
 	,CONSTRAINT users_PK PRIMARY KEY (mail)
 )ENGINE=InnoDB;
 
@@ -46,7 +53,7 @@ CREATE TABLE etat(
 
 CREATE TABLE commande(
         numero Int  Auto_increment  NOT NULL ,
-        date   Date ,
+        date   Datetime ,
         mail   Varchar (150) NOT NULL ,
         type   Varchar (150)
 	,CONSTRAINT commande_PK PRIMARY KEY (numero)
