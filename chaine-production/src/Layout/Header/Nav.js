@@ -9,10 +9,13 @@ export default function Nav() {
           <Link to="/">Home</Link>
         </li>
         <li>
-          <Link to="/about">About</Link>
+          <Link to="/commande/id">Commande</Link>
         </li>
         <li>
-          <Link to="/test">Shop</Link>
+          <Link to="/test">Test</Link>
+        </li>
+        <li>
+          <Link to="/12">Shop</Link>
         </li>
       </ul>
     </div>

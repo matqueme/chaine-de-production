@@ -42,8 +42,9 @@ CREATE TABLE users(
 #------------------------------------------------------------
 
 CREATE TABLE etat(
-        type Varchar (150) NOT NULL
-	,CONSTRAINT etat_PK PRIMARY KEY (type)
+        id_type Int  Auto_increment  NOT NULL ,
+        type    Varchar (150)
+	,CONSTRAINT etat_PK PRIMARY KEY (id_type)
 )ENGINE=InnoDB;
 
 
@@ -52,14 +53,14 @@ CREATE TABLE etat(
 #------------------------------------------------------------
 
 CREATE TABLE commande(
-        numero Int  Auto_increment  NOT NULL ,
-        date   Datetime ,
-        mail   Varchar (150) NOT NULL ,
-        type   Varchar (150)
+        numero  Int  Auto_increment  NOT NULL ,
+        date    Datetime ,
+        mail    Varchar (150) NOT NULL ,
+        id_type Int
 	,CONSTRAINT commande_PK PRIMARY KEY (numero)
 
 	,CONSTRAINT commande_users_FK FOREIGN KEY (mail) REFERENCES users(mail)
-	,CONSTRAINT commande_etat0_FK FOREIGN KEY (type) REFERENCES etat(type)
+	,CONSTRAINT commande_etat0_FK FOREIGN KEY (id_type) REFERENCES etat(id_type)
 )ENGINE=InnoDB;
 
 
