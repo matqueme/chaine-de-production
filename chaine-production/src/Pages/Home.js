@@ -1,4 +1,5 @@
-import CellTabHome from "../Components/cellTabHome.component";
+import BodyTab from "../Components/BodyTab.component";
+import PageCount from "../Components/PageCount.component";
 import { useState } from "react";
 
 function Home() {
@@ -29,12 +30,12 @@ function Home() {
     },
   ]);
 
+  /*----------------------Trier----------------------*/
   //Pour trier les colonne pour savoir si on clique sur la même ou pas
   const [colomnSort, setColomnSort] = useState(3);
   //Pour savoir comment on trie les colonnes (croissant/decroissant)
   const [orientationSort, setOrientationSort] = useState(1);
 
-  //A chaque clique
   const orderData = (column, data) => {
     setColomnSort(column);
     //variable qu'on utilise dans la fonction car les useState ne sont pas a jour avant la fin de la fonction
@@ -63,22 +64,138 @@ function Home() {
     setApi(apiSorted);
   };
 
+  /*----------------------Add----------------------TEMPORAIRE*/
+
+  const append = () => {
+    const nb = getRandomInt(100000);
+    const makeid1 = makeid(8);
+    let date1 = getRandomInt(24);
+    let date2 = getRandomInt(59);
+    let date3 = getRandomInt(30);
+    let date4 = getRandomInt(12);
+    if (date1 < 9) {
+      date1 = "0" + date1;
+    }
+    if (date2 < 9) {
+      date2 = "0" + date2;
+    }
+    if (date3 < 9) {
+      date3 = "0" + date3;
+    }
+    if (date4 < 9) {
+      date4 = "0" + date4;
+    }
+    setApi([
+      ...api,
+      {
+        numero: nb,
+        date: "2023-" + date4 + "-" + date3 + " " + date1 + ":" + date2 + ":05",
+        mail: makeid1 + "@gmail.com",
+        type: "Fait",
+      },
+    ]);
+
+    setNumberPageTotal(
+      [...Array(Math.floor((api.length - 1) / numberByPage) + 1).keys()].map(
+        (x) => ++x
+      )
+    );
+  };
+
+  function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
+  }
+
+  function makeid(length) {
+    var result = "";
+    var characters = "abcdefghijklmnopqrstuvwxyz0123456789";
+    var charactersLength = characters.length;
+    for (var i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+  }
+
+  /*----------------------Page----------------------*/
+
+  const [numberByPage, setNumberByPage] = useState(5);
+  const [numberOfThePage, setNumberOfThePage] = useState(1);
+  const [numberPageTotal, setNumberPageTotal] = useState(
+    [...Array(Math.floor((api.length - 1) / numberByPage) + 1).keys()].map(
+      (x) => ++x
+    )
+  );
+
+  //ajout de 1 pour la page si on est pas au max
+  const pageAdd = () => {
+    if (numberOfThePage - 1 < Math.floor((api.length - 1) / numberByPage)) {
+      setNumberOfThePage(numberOfThePage + 1);
+    }
+  };
+
+  //retrait de 1 pour la page si on est pas a la page 1
+  const pageRemove = () => {
+    if (numberOfThePage > 1) setNumberOfThePage(numberOfThePage - 1);
+  };
+
+  //verifie sur quel page on se met lorsque l'on change le nombre d'élément par page
+  const checkpage = (newNumberPage) => {
+    setNumberOfThePage(
+      Math.floor(((numberOfThePage - 1) * numberByPage) / newNumberPage + 1)
+    );
+    setNumberByPage(newNumberPage);
+    setNumberPageTotal(
+      [...Array(Math.floor((api.length - 1) / newNumberPage) + 1).keys()].map(
+        (x) => ++x
+      )
+    );
+  };
+
+  /*----------------------Affichage----------------------*/
+
   return (
-    <table>
-      <thead>
-        <tr>
-          <th onClick={() => orderData(0, "numero")}>Numero commande</th>
-          <th onClick={() => orderData(2, "date")}>Date</th>
-          <th onClick={() => orderData(2, "mail")}>Client</th>
-          <th onClick={() => orderData(3, "type")}>Statut</th>
-        </tr>
-      </thead>
-      <tbody>
-        {api.map((apiData, index) => (
-          <CellTabHome key={index} data={apiData} name={index} />
-        ))}
-      </tbody>
-    </table>
+    <>
+      <button onClick={append}>append</button>
+      <table>
+        <thead>
+          <tr>
+            <th onClick={() => orderData(0, "numero")}>Numero commande</th>
+            <th onClick={() => orderData(1, "date")}>Date</th>
+            <th onClick={() => orderData(2, "mail")}>Client</th>
+            <th onClick={() => orderData(3, "type")}>Statut</th>
+          </tr>
+        </thead>
+        <tbody>
+          <BodyTab api={api} page={numberOfThePage} nbPage={numberByPage} />
+        </tbody>
+      </table>
+
+      <PageCount api={api} page={numberOfThePage} nbPage={numberByPage} />
+
+      <label>
+        Nombre par page :
+        <select onChange={(e) => checkpage(e.target.value)}>
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+        </select>
+      </label>
+      <p />
+      <label>
+        Page :
+        <select onChange={(e) => setNumberOfThePage(e.target.value)}>
+          {numberPageTotal.map((value) => (
+            <option key={value} value={value}>
+              {value}
+            </option>
+          ))}
+        </select>
+      </label>
+      <button onClick={pageRemove}>‹</button>
+      <button onClick={pageAdd}>›</button>
+    </>
   );
 }
 export default Home;
