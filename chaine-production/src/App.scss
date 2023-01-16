@@ -1,3 +1,55 @@
-tr.clickableRow {
-  cursor: pointer;
+@use "./const" as const;
+
+/*FONT*/
+@mixin font($n: 10px) {
+  font-family: "Inter";
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.button {
+  background-color: const.$white;
+  color: const.$blackPearl;
+  font-weight: const.$semi-bold;
+  border: 2px const.$blackPearl solid;
+  border-radius: 8px;
+  font-size: 18px;
+  padding: 5px 15px;
+  &:hover {
+    animation: fillButton 0.2s ease-out both;
+    cursor: pointer;
+  }
+}
+
+@keyframes fillButton {
+  0% {
+    background-color: const.$white;
+    color: const.$blackPearl;
+  }
+  100% {
+    background-color: const.$blackPearl;
+    color: const.$white;
+  }
+}
+
+#root {
+  min-height: 100vh;
+}
+.App {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: row;
+}
+
+.content {
+  padding: 20px;
+}
+
+.navbar {
+  padding: 35px 20px;
+  border-right: 2px const.$seashell solid;
+  min-width: 230px;
 }

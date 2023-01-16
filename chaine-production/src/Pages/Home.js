@@ -154,7 +154,7 @@ function Home() {
   /*----------------------Affichage----------------------*/
 
   return (
-    <>
+    <div className="content">
       <button onClick={append}>append</button>
       <table>
         <thead>
@@ -195,7 +195,7 @@ function Home() {
       </label>
       <button onClick={pageRemove}>‹</button>
       <button onClick={pageAdd}>›</button>
-    </>
+    </div>
   );
 }
 export default Home;
