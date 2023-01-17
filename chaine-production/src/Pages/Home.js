@@ -195,6 +195,7 @@ function Home() {
       </label>
       <button onClick={pageRemove}>‹</button>
       <button onClick={pageAdd}>›</button>
+      <p id="test"></p>
     </div>
   );
 }
