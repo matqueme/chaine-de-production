@@ -9,24 +9,28 @@ function Home() {
       date: "2023-01-05 19:12:02",
       mail: "pierre.dupont@gmail.com",
       type: "Non traitee",
+      prix: "10,00 €",
     },
     {
       numero: "234569",
       date: "2023-01-03 18:15:02",
       mail: "agathe.lorn@gmail.com",
       type: "En cours",
+      prix: "12,00 €",
     },
     {
       numero: "611111",
       date: "2023-01-03 18:18:02",
       mail: "testl.lorn@gmail.com",
       type: "En cours",
+      prix: "10,00 €",
     },
     {
       numero: "211111",
       date: "2023-01-03 18:18:02",
       mail: "testl.lorn@gmail.com",
       type: "En cours",
+      prix: "10,00 €",
     },
   ]);
 
@@ -155,6 +159,12 @@ function Home() {
 
   return (
     <div className="content">
+      <h1>Commandes</h1>
+      <h2>
+        Bienvenue sur notre page web de gestion de commande. Cet outil en ligne
+        permet de gérer des commandes de produits ou de services en quelques
+        clics. Il permet aussi de gérer l’envoie des commandes au robot.
+      </h2>
       <button onClick={append}>append</button>
       <table>
         <thead>
@@ -163,6 +173,7 @@ function Home() {
             <th onClick={() => orderData(1, "date")}>Date</th>
             <th onClick={() => orderData(2, "mail")}>Client</th>
             <th onClick={() => orderData(3, "type")}>Statut</th>
+            <th onClick={() => orderData(4, "prix")}>Prix</th>
           </tr>
         </thead>
         <tbody>

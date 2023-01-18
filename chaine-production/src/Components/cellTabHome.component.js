@@ -13,6 +13,7 @@ function CellTabHome(props) {
       <td>{props.data.date}</td>
       <td>{props.data.mail}</td>
       <td>{props.data.type}</td>
+      <td>{props.data.prix}</td>
     </tr>
   );
 }

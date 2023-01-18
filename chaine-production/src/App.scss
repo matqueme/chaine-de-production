@@ -43,11 +43,42 @@ ul {
 }
 
 .content {
-  padding: 20px;
+  padding: 20px 70px;
   overflow-y: auto;
   flex: 1;
 }
 
 #test {
   height: 1000px;
+}
+
+h1 {
+  font-weight: const.$bold;
+  color: const.$black;
+  font-size: 24px;
+}
+
+h2 {
+  font-weight: const.$regular;
+  color: const.$manatee;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  th,
+  td {
+    width: 1%;
+  }
+  td {
+    text-align: center;
+    height: 35px;
+  }
+
+  th {
+    border-bottom: 2px const.$seashell solid;
+    height: 35px;
+  }
 }
