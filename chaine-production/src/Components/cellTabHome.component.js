@@ -10,10 +10,14 @@ function CellTabHome(props) {
   return (
     <tr onClick={handleOnClick}>
       <td>{props.data.numero}</td>
-      <td>{props.data.date}</td>
       <td>{props.data.mail}</td>
-      <td>{props.data.type}</td>
-      <td>{props.data.prix}</td>
+      <td>{props.data.date}</td>
+      <td className="price">{props.data.prix}</td>
+      <td>
+        <div className="typeTab">
+          <div>{props.data.type}</div>
+        </div>
+      </td>
     </tr>
   );
 }

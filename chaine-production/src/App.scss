@@ -11,7 +11,7 @@ ul {
   font-weight: const.$semi-bold;
   border: 2px const.$blackPearl solid;
   border-radius: 8px;
-  font-size: 18px;
+  font-size: 14px;
   padding: 5px 15px;
   &:hover {
     animation: fillButton 0.2s ease-out both;
@@ -55,14 +55,14 @@ ul {
 h1 {
   font-weight: const.$bold;
   color: const.$black;
-  font-size: 24px;
+  font-size: 22px;
 }
 
 h2 {
   font-weight: const.$regular;
   color: const.$manatee;
   text-decoration: none;
-  font-size: 16px;
+  font-size: 12px;
 }
 
 table {
@@ -71,14 +71,37 @@ table {
   th,
   td {
     width: 1%;
+    height: 35px;
   }
   td {
     text-align: center;
-    height: 35px;
+    font-size: 12px;
   }
 
   th {
     border-bottom: 2px const.$seashell solid;
-    height: 35px;
+    font-size: 14px;
   }
+}
+
+.typeTab {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin: 8px;
+  div {
+    background-color: const.$aTraiterEmpty;
+    width: 50%;
+    padding: 2px;
+    text-align: center;
+    border: 2px const.$aTraiterFull solid;
+    color: const.$aTraiterFull;
+    font-weight: const.$semi-bold;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+}
+
+.price {
+  font-weight: const.$semi-bold;
 }

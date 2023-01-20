@@ -122,7 +122,7 @@ function Home() {
 
   /*----------------------Page----------------------*/
 
-  const [numberByPage, setNumberByPage] = useState(5);
+  const [numberByPage, setNumberByPage] = useState(10);
   const [numberOfThePage, setNumberOfThePage] = useState(1);
   const [numberPageTotal, setNumberPageTotal] = useState(
     [...Array(Math.floor((api.length - 1) / numberByPage) + 1).keys()].map(
@@ -170,10 +170,10 @@ function Home() {
         <thead>
           <tr>
             <th onClick={() => orderData(0, "numero")}>Numero commande</th>
-            <th onClick={() => orderData(1, "date")}>Date</th>
-            <th onClick={() => orderData(2, "mail")}>Client</th>
-            <th onClick={() => orderData(3, "type")}>Statut</th>
-            <th onClick={() => orderData(4, "prix")}>Prix</th>
+            <th onClick={() => orderData(1, "mail")}>Client</th>
+            <th onClick={() => orderData(2, "date")}>Date</th>
+            <th onClick={() => orderData(3, "prix")}>Prix</th>
+            <th onClick={() => orderData(4, "type")}>Statut</th>
           </tr>
         </thead>
         <tbody>
@@ -186,7 +186,6 @@ function Home() {
       <label>
         Nombre par page :
         <select onChange={(e) => checkpage(e.target.value)}>
-          <option value="5">5</option>
           <option value="10">10</option>
           <option value="50">50</option>
           <option value="100">100</option>
