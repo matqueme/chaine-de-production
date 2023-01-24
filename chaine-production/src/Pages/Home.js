@@ -1,8 +1,18 @@
 import BodyTab from "../Components/BodyTab.component";
 import PageCount from "../Components/PageCount.component";
 import { useState } from "react";
+import NavCommande from "../Layout/Header/NavCommande";
+import { useLocation } from "react-router-dom";
 
 function Home() {
+  const location = useLocation();
+  // The current location.
+  console.log(location.pathname.slice(1));
+  // eslint-disable-next-line no-unused-vars
+  const [nb_type, setNb_type] = useState([
+    { atraiter: "2", continuer: "2", annulee: "0", envoirobot: "3" },
+  ]);
+
   const [api, setApi] = useState([
     {
       numero: "563834",
@@ -165,6 +175,7 @@ function Home() {
         permet de gérer des commandes de produits ou de services en quelques
         clics. Il permet aussi de gérer l’envoie des commandes au robot.
       </h2>
+      <NavCommande nb_type={nb_type} />
       <button onClick={append}>append</button>
       <table>
         <thead>
@@ -181,30 +192,33 @@ function Home() {
         </tbody>
       </table>
 
-      <PageCount api={api} page={numberOfThePage} nbPage={numberByPage} />
+      <div className="footerTab">
+        <PageCount api={api} page={numberOfThePage} nbPage={numberByPage} />
 
-      <label>
-        Nombre par page :
-        <select onChange={(e) => checkpage(e.target.value)}>
-          <option value="10">10</option>
-          <option value="50">50</option>
-          <option value="100">100</option>
-          <option value="500">500</option>
-        </select>
-      </label>
-      <p />
-      <label>
-        Page :
-        <select onChange={(e) => setNumberOfThePage(e.target.value)}>
-          {numberPageTotal.map((value) => (
-            <option key={value} value={value}>
-              {value}
-            </option>
-          ))}
-        </select>
-      </label>
-      <button onClick={pageRemove}>‹</button>
-      <button onClick={pageAdd}>›</button>
+        <label>
+          Nombre par page :
+          <select onChange={(e) => checkpage(e.target.value)}>
+            <option value="10">10</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+            <option value="500">500</option>
+          </select>
+        </label>
+        <div>
+          <label>
+            Vous êtes sur la pages :
+            <select onChange={(e) => setNumberOfThePage(e.target.value)}>
+              {numberPageTotal.map((value) => (
+                <option key={value} value={value}>
+                  {value}
+                </option>
+              ))}
+            </select>
+          </label>
+          <button onClick={pageRemove}>‹</button>
+          <button onClick={pageAdd}>›</button>
+        </div>
+      </div>
       <p id="test"></p>
     </div>
   );

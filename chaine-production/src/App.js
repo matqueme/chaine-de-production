@@ -15,7 +15,13 @@ function App() {
         {/* <Route index element={<Home />} />
         <Route path="blogs" element={<Blogs />} />
         <Route path="contact" element={<Contact />} /> */}
-        <Route path="/" element={<Home />} />
+        <Route path="/commandes" element={<Home />} />
+        <Route path="/atraiter" element={<Home />} />
+        <Route path="/continuer" element={<Home />} />
+        <Route path="/completer" element={<Home />} />
+        <Route path="/annulee" element={<Home />} />
+        <Route path="/robot" element={<Home />} />
+
         <Route path="test" element={<Test />} />
         <Route path="commande/:id" element={<Commande />} />
         <Route path="*" element={<Error />} />

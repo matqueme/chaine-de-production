@@ -9,7 +9,7 @@ export default function Nav() {
         <ul className="nav-links">
           <li className="title">Tableau de bord</li>
           <li className="subtitle">
-            <Link to="/" className="subtitle">
+            <Link to="/commandes" className="subtitle">
               Commandes
             </Link>
           </li>

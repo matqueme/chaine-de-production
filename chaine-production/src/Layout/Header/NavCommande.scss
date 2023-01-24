@@ -1,0 +1,54 @@
+@use "../../const" as const;
+
+.navCommande {
+  position: relative;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.select {
+  padding: 10px;
+  position: relative;
+  a {
+    color: const.$modnightBlue;
+    text-decoration: none;
+  }
+}
+.notSelect {
+  padding: 10px;
+  position: relative;
+  a {
+    text-decoration: none;
+    color: const.$manatee;
+  }
+
+  &:hover {
+    a {
+      color: const.$modnightBlue;
+    }
+    //after hover
+    .line {
+      border-bottom: 2px solid const.$modnightBlue;
+    }
+  }
+}
+
+.line {
+  width: 100%;
+  border-bottom: 2px solid const.$seashell;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+.lineselect {
+  width: 100%;
+  border-bottom: 2px solid const.$modnightBlue;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+}

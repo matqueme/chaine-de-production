@@ -10,7 +10,7 @@ ul {
   color: const.$blackPearl;
   font-weight: const.$semi-bold;
   border: 2px const.$blackPearl solid;
-  border-radius: 8px;
+  border-radius: 5px;
   font-size: 14px;
   padding: 5px 15px;
   &:hover {
@@ -104,4 +104,26 @@ table {
 
 .price {
   font-weight: const.$semi-bold;
+}
+
+.footerTab {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  background-color: const.$athensGray;
+  padding: 0px 16px;
+  border-radius: 5px;
+  color: const.$manatee;
+
+  select {
+    padding: 4px 2px;
+    text-align: center;
+    border: 1px solid const.$seashell;
+    color: const.$black;
+    border-radius: 5px;
+    margin: 0 10px;
+    font-weight: const.$semi-bold;
+  }
 }
