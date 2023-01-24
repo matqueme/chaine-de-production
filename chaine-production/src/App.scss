@@ -127,3 +127,40 @@ table {
     font-weight: const.$semi-bold;
   }
 }
+
+.search {
+  position: relative;
+  display: flex;
+  background-color: const.$athensGray;
+  min-width: 150px;
+  overflow: hidden;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 30px;
+  svg {
+    position: absolute;
+    top: 50%;
+    transform: translate(11px, -50%);
+    fill: const.$manatee;
+    vertical-align: middle;
+  }
+  input:focus {
+    outline: none !important;
+    border: 2px solid const.$modnightBlue;
+    height: 23.4px;
+  }
+  input::placeholder {
+    color: const.$manatee;
+  }
+}
+
+.inputsearch {
+  border: solid 1px const.$seashell;
+  height: 25px;
+  max-width: 800px;
+  min-width: 150px;
+  overflow: hidden;
+  width: 40%;
+  border-radius: 5px;
+  padding-left: 32px;
+}
