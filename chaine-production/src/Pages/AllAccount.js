@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import axios from "axios";
+import UserCard from "../Components/userCard.component";
+import "./AllAccount.scss";
 
 const AllAccount = () => {
   const [accounts, setAccounts] = useState([]);
@@ -8,8 +9,8 @@ const AllAccount = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await axios("https://api.chaine-production.com/accounts");
-
+      //cors origin
+      const result = await axios("http://projet.local/index/api/users");
       setAccounts(result.data);
       setLoading(false);
     };
@@ -19,17 +20,16 @@ const AllAccount = () => {
 
   return (
     <div>
-      <h1>All Accounts</h1>
+      <h2 className="title">Utilisateurs</h2>
+      <h3 className="title">Liste de tous les utilisateurs</h3>
       {loading ? (
         <div>Loading...</div>
       ) : (
-        <ul>
+        <div className="accountList">
           {accounts.map((account) => (
-            <li key={account.id}>
-              <Link to={`/account/${account.id}`}>{account.name}</Link>
-            </li>
+            <UserCard key={account.mail} account={account} />
           ))}
-        </ul>
+        </div>
       )}
     </div>
   );

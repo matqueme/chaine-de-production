@@ -13,3 +13,37 @@ ul {
 svg {
   width: 5%;
 }
+
+#root {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/*Si witdh >= 800 mettre width de app a 800 sinon 100%*/
+
+.App {
+  width: 100%;
+  padding: 5px 25px;
+  box-sizing: border-box;
+  @media (min-width: 800px) {
+    width: 800px;
+  }
+}
+
+h2 {
+  font-weight: const.$semi-bold;
+  color: const.$black;
+  font-size: 24px;
+}
+
+h3 {
+  font-weight: const.$regular;
+  font-size: 18px;
+  color: const.$grey;
+}
+
+.title {
+  margin-left: 10px;
+}

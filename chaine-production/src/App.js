@@ -6,6 +6,7 @@ import Test from "./Pages/Test";
 import SignIn from "./Pages/SignIn";
 import SignUp from "./Pages/SignUp";
 import Account from "./Pages/Account";
+import AllAccount from "./Pages/AllAccount";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path="/product/:id" element={<Home />} />
         <Route path="/order" element={<Home />} />
         <Route path="/account" element={<Account />} />
+        <Route path="/allaccount" element={<AllAccount />} />
 
         <Route path="test" element={<Test />} />
         <Route path="*" element={<Error />} />

@@ -1,0 +1,53 @@
+@use "../const" as const;
+
+.user-card {
+  min-height: 90px;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background: const.$white;
+  border-radius: 30px;
+  box-shadow: 0px 0px 8px 2px rgba(0, 0, 0, 0.25);
+  margin: 25px 0;
+  padding: 10px 50px;
+  p {
+    margin: 0;
+    height: 100%;
+  }
+  .user-card__name {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    p {
+      font-weight: const.$semi-bold;
+      color: const.$black;
+      font-size: 16px;
+    }
+  }
+
+  .user-card__info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    .mailInfo {
+      font-weight: const.$regular;
+      color: const.$grey;
+      font-size: 14px;
+    }
+  }
+
+  .user-card__actions {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    svg {
+      width: 70%;
+    }
+  }
+}
+
+.accountList {
+  margin-top: 50px;
+}
