@@ -36,6 +36,13 @@ function Home() {
 
   return (
     <div className="content">
+      <ul>
+        <a href="signin">signin </a>
+        <a href="signup">signup </a>
+        <a href="/">home </a>
+        <a href="account">account </a>
+        <a href="error">error </a>
+      </ul>
       <h1>Commandes</h1>
       <h2>Commande</h2>
     </div>

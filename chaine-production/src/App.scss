@@ -1,6 +1,15 @@
 @use "./const" as const;
 
+h1 {
+  color: const.$blue;
+  font-family: "Fascinate Inline";
+}
+
 ul {
   list-style-type: none;
   padding: 0;
+}
+
+svg {
+  width: 5%;
 }
