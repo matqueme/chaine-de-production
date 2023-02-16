@@ -9,6 +9,14 @@ if (!$db) {
     exit;
 }
 
+// Send data to the client.
+header('Access-Control-Allow-Headers: *');
+header('Access-Control-Allow-Origin: *');
+header('Content-Type: application/json; charset=utf-8');
+header('Cache-control: no-store, no-cache, must-revalidate');
+header('Pragma: no-cache');
+header('HTTP/1.1 200 OK');
+
 $requestMethod = $_SERVER['REQUEST_METHOD'];
 $request = substr($_SERVER['PATH_INFO'], 1);
 $request = explode('/', $request); //["API","i","j"]
@@ -63,7 +71,7 @@ if ($requestRessource == "api") {
     if ($requestMethod == "POST") //si on est sur une méthode get et isen on fait une requette sql pour afficher les différents nom de site_isen
     {
         if ($id == "add_user" && $param == NULL) {
-
+            print_r($_POST);
             $data = add_user($db, $_POST["mail"], $_POST["nom"], $_POST["prenom"], $_POST["pwd"], $_POST["adresse"], $_POST["age"], $_POST["telephone"]);
             echo $data;
         }
@@ -71,11 +79,6 @@ if ($requestRessource == "api") {
 }
 
 
-// Send data to the client.
-header('Content-Type: application/json; charset=utf-8');
-header('Cache-control: no-store, no-cache, must-revalidate');
-header('Pragma: no-cache');
-header('HTTP/1.1 200 OK');
-header('Access-Control-Allow-Origin: http://localhost:3000');
+
 
 exit;
