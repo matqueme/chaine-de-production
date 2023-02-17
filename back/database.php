@@ -40,13 +40,9 @@ function dbRequest($db, $request)
     return $result;
 }
 
-
-function add_user($db, $mail, $nom, $prenom, $pwd, $adresse, $age, $telephone) //fonction permettant d'intégrer les valeurs recues par la requête ajax dans la base de données, ici dans la table "utilisateur"
+//fonction pour ajouter un utilisateur
+function addUser($db, $mail, $nom, $prenom, $pwd, $adresse, $age, $telephone)
 {
-    /* try
-  {
-    if($mdp == $confirm_mdp)//on compare les deux mots de passes
-    {*/
     $pwd = password_hash($pwd, PASSWORD_DEFAULT); //hashage du mot de passe
     $request = "INSERT INTO users (mail, nom, prenom, pwd, adresse, age, telephone) VALUES (:mail, :nom, :prenom, :pwd, :adresse, :age, :telephone)";
     $stmt = $db->prepare($request);

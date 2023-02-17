@@ -35,11 +35,6 @@ const SignUp = () => {
       setError("Le mot de passe doit contenir au moins un caractère spécial");
     } else if (password !== passwordConfirmation) {
       setError("Les mots de passe ne correspondent pas");
-    } else if (isSetMail === false) {
-      setIsSetMail(true);
-      setError("");
-
-      e.target.reset();
     } else {
       //start an axios request POST
       let data = new FormData();
@@ -52,8 +47,14 @@ const SignUp = () => {
       data.append("telephone", phone);
 
       axios
-        .post("http://projet.local/index/api/add_user", data)
-        .then((response) => console.log(response.data))
+        .post("http://projet.local/index/api/addUser", data)
+        .then((response) => {
+          if (response.data === "error") {
+            setError("L'adresse e-mail n'est pas valide");
+          } else if (response.data === "success") {
+            setError("Votre compte a bien été créé");
+          }
+        })
         .catch((e) => {
           this.errors.push(e);
         });
@@ -65,25 +66,7 @@ const SignUp = () => {
     if (isSetMail === false) {
       setIsSetMail(true);
       setError("");
-
       e.target.reset();
-    } else {
-      //start an axios request POST
-      let data = new FormData();
-      data.append("mail", mail);
-      data.append("nom", lastName);
-      data.append("prenom", firstName);
-      data.append("pwd", password);
-      data.append("adresse", address + " " + zipCode + " " + city);
-      data.append("age", age);
-      data.append("telephone", phone);
-
-      axios
-        .post("http://projet.local/index/api/add_user", data)
-        .then((response) => console.log(response.data))
-        .catch((e) => {
-          this.errors.push(e);
-        });
     }
   };
   return (
