@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import NameWebsite from "../Components/NameWesite.component";
 import axios from "axios";
+import "./Sign.scss";
+
 const SignUp = () => {
   const [isSetMail, setIsSetMail] = useState(false);
   const [mail, setMail] = useState("");
@@ -14,6 +17,7 @@ const SignUp = () => {
   const [phone, setPhone] = useState("");
   const [age, setAge] = useState("");
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -52,7 +56,8 @@ const SignUp = () => {
           if (response.data === "error") {
             setError("L'adresse e-mail n'est pas valide");
           } else if (response.data === "success") {
-            setError("Votre compte a bien été créé");
+            setSuccess("Votre compte a bien été créé");
+            e.target.reset();
           }
         })
         .catch((e) => {
@@ -70,43 +75,8 @@ const SignUp = () => {
     }
   };
   return (
-    <div>
-      <svg
-        id="Calque_1"
-        data-name="Calque 1"
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 38.7848 44.6739"
-      >
-        <path
-          d="M25.2255,5.9c-4.6-2.1-8.9-2.8-9.5-1.5-.1,.3,0,.7,.3,1.2v.1c-1.2,.7-2.5,.7-3.3,2.3-.7,1.6-10.8,24.3-10.8,24.3-.5,1.1,.1,2.4,1.4,3.8-1,2.2,12.7,8.7,13.8,6.3,1.7,0,2.9-.4,3.5-1.6l11-24.2c.8-1.7,.1-2.3-.1-3.9h0c.6-.1,1-.3,1.2-.6,.5-1.3-2.8-4-7.5-6.2Zm5.5,3.9c-.2,.4-3.1-.6-6.4-2.1-3.4-1.6-5.9-3.2-5.8-3.6,.2-.4,3,.6,6.4,2.1,3.4,1.6,5.9,3.2,5.8,3.6Z"
-          fill="#003171"
-          stroke="#003171"
-          strokeWidth="3.5"
-        />
-        <path
-          d="M9.6255,5c1.4-2.7,2.3-3.5,4.5-4"
-          fill="none"
-          stroke="#003171"
-          strokeLinecap="round"
-          strokeWidth="2"
-        />
-        <path
-          d="M37.3255,11.2c.7,2.1,.6,3.4-.3,5.8"
-          fill="none"
-          stroke="#003171"
-          strokeLinecap="round"
-          strokeWidth="2"
-        />
-        <path
-          d="M30.9255,14.6h0c.9-.2,1.6,.7,1.2,1.5l-11.6,25.2c-.1,.3-.5,.5-.8,.6l-1.6,.2L30.9255,14.6Z"
-          fill="#fff"
-        />
-        <path
-          d="M30.7255,9.8c-.2,.4-3.1-.6-6.4-2.1-3.4-1.6-5.9-3.2-5.8-3.6,.2-.4,3,.6,6.4,2.1,3.4,1.6,5.9,3.2,5.8,3.6Z"
-          fill="#fff"
-        />
-      </svg>
-      <h1>AutoBar</h1>
+    <div className="sign">
+      <NameWebsite />
       <h2>Insciption</h2>
       <h3>Créer un compte pour accéder a toutes nos fonctionnalités.</h3>
 
@@ -120,6 +90,7 @@ const SignUp = () => {
             onChange={(e) => setMail(e.target.value)}
             required="required"
             autoComplete="off"
+            className={mail === "" ? "empty" : ""}
           />
 
           <label htmlFor="passwordField">Mot de passe</label>
@@ -130,6 +101,7 @@ const SignUp = () => {
             onChange={(e) => setPassword(e.target.value)}
             required="required"
             autoComplete="off"
+            className={password === "" ? "empty" : ""}
           />
 
           <label htmlFor="passwordConfirmation">
@@ -142,9 +114,10 @@ const SignUp = () => {
             onChange={(e) => setPasswordConfirmation(e.target.value)}
             required="required"
             autoComplete="off"
+            className={passwordConfirmation === "" ? "empty" : ""}
           />
 
-          <input type="submit" value="Inscription" />
+          <input type="submit" value="Inscription" className="submitButton" />
         </form>
       ) : (
         <form onSubmit={handleSubmit2}>
@@ -158,6 +131,7 @@ const SignUp = () => {
             onChange={(e) => {
               setLastName(e.target.value);
             }}
+            className={lastName === "" ? "empty" : ""}
           />
 
           <label htmlFor="fname">Prénom</label>
@@ -170,6 +144,7 @@ const SignUp = () => {
             onChange={(e) => {
               setFirstName(e.target.value);
             }}
+            className={firstName === "" ? "empty" : ""}
           />
 
           <label htmlFor="address">Adresse</label>
@@ -182,6 +157,7 @@ const SignUp = () => {
             onChange={(e) => {
               setAddress(e.target.value);
             }}
+            className={address === "" ? "empty" : ""}
           />
 
           <label htmlFor="zipcode">Code Postal</label>
@@ -194,6 +170,7 @@ const SignUp = () => {
             onChange={(e) => {
               setZipCode(e.target.value);
             }}
+            className={zipCode === "" ? "empty" : ""}
           />
 
           <label htmlFor="postalCode">Ville</label>
@@ -206,6 +183,7 @@ const SignUp = () => {
             onChange={(e) => {
               setCity(e.target.value);
             }}
+            className={city === "" ? "empty" : ""}
           />
 
           <label htmlFor="phone">Téléphone</label>
@@ -218,6 +196,7 @@ const SignUp = () => {
             onChange={(e) => {
               setPhone(e.target.value);
             }}
+            className={phone === "" ? "empty" : ""}
           />
 
           <label htmlFor="age">Age</label>
@@ -230,14 +209,16 @@ const SignUp = () => {
             onChange={(e) => {
               setAge(e.target.value);
             }}
+            className={age === "" ? "empty" : ""}
           />
 
-          <input type="submit" value="Inscription" />
+          <input type="submit" value="Inscription" className="submitButton" />
         </form>
       )}
-      <p>{error}</p>
-      <p>
-        Déja inscrit ? <Link to={"../signin"}>Connectez-vous</Link>
+      <p className="error">{error}</p>
+      <p className="success">{success}</p>
+      <p className="changeConnect">
+        Déja inscrit ?&nbsp;<Link to={"../signin"}>Connectez-vous</Link>
       </p>
     </div>
   );

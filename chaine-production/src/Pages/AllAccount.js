@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import UserCard from "../Components/userCard.component";
+import UserCard from "../Components/UserCard.component";
 import "./AllAccount.scss";
 
 const AllAccount = () => {
@@ -19,7 +19,7 @@ const AllAccount = () => {
   }, []);
 
   return (
-    <div>
+    <div className="accounts">
       <h2 className="title">Utilisateurs</h2>
       <h3 className="title">Liste de tous les utilisateurs</h3>
       {loading ? (

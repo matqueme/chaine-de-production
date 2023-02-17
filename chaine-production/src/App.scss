@@ -1,5 +1,13 @@
 @use "./const" as const;
 
+html,
+body {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  font-family: "Inter", sans-serif;
+}
+
 h1 {
   color: const.$blue;
   font-family: "Fascinate Inline";
@@ -17,33 +25,41 @@ svg {
 #root {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  height: 100%;
+  align-items: stretch;
 }
 
 /*Si witdh >= 800 mettre width de app a 800 sinon 100%*/
 
 .App {
   width: 100%;
-  padding: 5px 25px;
+  padding: 0 25px;
   box-sizing: border-box;
+  height: 100%;
   @media (min-width: 800px) {
     width: 800px;
   }
+  align-self: center;
 }
 
 h2 {
   font-weight: const.$semi-bold;
   color: const.$black;
   font-size: 24px;
+  margin: 10px 0;
 }
 
 h3 {
   font-weight: const.$regular;
   font-size: 18px;
   color: const.$grey;
+  margin: 10px 0;
 }
 
 .title {
   margin-left: 10px;
+}
+
+p {
+  margin: 0;
 }
