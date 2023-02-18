@@ -1,50 +1,83 @@
 import { useState } from "react";
+import ProductCard from "../Components/PoductCard.component";
+import "./Home.scss";
 
 function Home() {
   const [api, setApi] = useState([
     {
-      numero: "563834",
-      date: "2023-01-05 19:12:02",
-      mail: "pierre.dupont@gmail.com",
-      type: "Non traitee",
-      prix: "10,00 €",
+      id: 0,
+      nom: "Coca-cola",
+      image: "coke-can.png",
+      poids: "33 cl",
     },
     {
-      numero: "234569",
-      date: "2023-01-03 18:15:02",
-      mail: "agathe.lorn@gmail.com",
-      type: "En cours",
-      prix: "12,00 €",
+      id: 1,
+      nom: "Coca-cola",
+      image: "coke-can.png",
+      poids: "33 cl",
     },
     {
-      numero: "611111",
-      date: "2023-01-03 18:18:02",
-      mail: "testl.lorn@gmail.com",
-      type: "En cours",
-      prix: "10,00 €",
+      id: 2,
+      nom: "Coca-cola",
+      image: "coke-can.png",
+      poids: "33 cl",
     },
     {
-      numero: "211111",
-      date: "2023-01-03 18:18:02",
-      mail: "testl.lorn@gmail.com",
-      type: "En cours",
-      prix: "10,00 €",
+      id: 3,
+      nom: "Coca-cola",
+      image: "coke-can.png",
+      poids: "33 cl",
     },
   ]);
+
+  function test() {
+    //ajouter un produit dans le tableau api en utilisant la fonction setApi
+    setApi([
+      ...api,
+      {
+        id: api.length,
+        nom: "Coca-cola",
+        image: "coke-can.png",
+        poids: "33 cl",
+      },
+    ]);
+  }
 
   /*----------------------Affichage----------------------*/
 
   return (
     <div className="content">
       <ul>
-        <a href="signin">signin </a>
-        <a href="signup">signup </a>
-        <a href="/">home </a>
-        <a href="account">account </a>
-        <a href="error">error </a>
+        <li>
+          <a href="signin">signin</a>
+        </li>
+        <li>
+          <a href="signup">signup</a>
+        </li>
+        <li>
+          <a href="/">home</a>
+        </li>
+        <li>
+          <a href="account">account</a>
+        </li>
+        <li>
+          <a href="allaccount">allaccount</a>
+        </li>
+        <li>
+          <a href="error">error</a>
+        </li>
+        <li>
+          <button onClick={test}> test</button>
+        </li>
       </ul>
+
       <h1>Commandes</h1>
       <h2>Commande</h2>
+      <div className="product-container">
+        {api.map((product) => (
+          <ProductCard product={product} key={product.id} />
+        ))}
+      </div>
     </div>
   );
 }

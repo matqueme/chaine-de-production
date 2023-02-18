@@ -76,150 +76,152 @@ const SignUp = () => {
   };
   return (
     <div className="sign">
-      <NameWebsite />
-      <h2>Insciption</h2>
-      <h3>Créer un compte pour accéder a toutes nos fonctionnalités.</h3>
+      <div className="signchild">
+        <NameWebsite />
+        <h2>Insciption</h2>
+        <h3>Créer un compte pour accéder a toutes nos fonctionnalités.</h3>
 
-      {isSetMail ? (
-        <form onSubmit={handleSubmit}>
-          <label htmlFor="email">Adresse e-mail</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            onChange={(e) => setMail(e.target.value)}
-            required="required"
-            autoComplete="off"
-            className={mail === "" ? "empty" : ""}
-          />
+        {isSetMail ? (
+          <form onSubmit={handleSubmit}>
+            <label htmlFor="email">Adresse e-mail</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              onChange={(e) => setMail(e.target.value)}
+              required="required"
+              autoComplete="off"
+              className={mail === "" ? "empty" : ""}
+            />
 
-          <label htmlFor="passwordField">Mot de passe</label>
-          <input
-            type="password"
-            id="passwordField"
-            name="passwordField"
-            onChange={(e) => setPassword(e.target.value)}
-            required="required"
-            autoComplete="off"
-            className={password === "" ? "empty" : ""}
-          />
+            <label htmlFor="passwordField">Mot de passe</label>
+            <input
+              type="password"
+              id="passwordField"
+              name="passwordField"
+              onChange={(e) => setPassword(e.target.value)}
+              required="required"
+              autoComplete="off"
+              className={password === "" ? "empty" : ""}
+            />
 
-          <label htmlFor="passwordConfirmation">
-            Confirmer le mot de passe
-          </label>
-          <input
-            type="password"
-            id="passwordConfirmation"
-            name="passwordConfirmation"
-            onChange={(e) => setPasswordConfirmation(e.target.value)}
-            required="required"
-            autoComplete="off"
-            className={passwordConfirmation === "" ? "empty" : ""}
-          />
+            <label htmlFor="passwordConfirmation">
+              Confirmer le mot de passe
+            </label>
+            <input
+              type="password"
+              id="passwordConfirmation"
+              name="passwordConfirmation"
+              onChange={(e) => setPasswordConfirmation(e.target.value)}
+              required="required"
+              autoComplete="off"
+              className={passwordConfirmation === "" ? "empty" : ""}
+            />
 
-          <input type="submit" value="Inscription" className="submitButton" />
-        </form>
-      ) : (
-        <form onSubmit={handleSubmit2}>
-          <label htmlFor="lname">Nom</label>
-          <input
-            type="text"
-            id="lname"
-            name="lname"
-            required="required"
-            autoComplete="off"
-            onChange={(e) => {
-              setLastName(e.target.value);
-            }}
-            className={lastName === "" ? "empty" : ""}
-          />
+            <input type="submit" value="Inscription" className="submitButton" />
+          </form>
+        ) : (
+          <form onSubmit={handleSubmit2}>
+            <label htmlFor="lname">Nom</label>
+            <input
+              type="text"
+              id="lname"
+              name="lname"
+              required="required"
+              autoComplete="off"
+              onChange={(e) => {
+                setLastName(e.target.value);
+              }}
+              className={lastName === "" ? "empty" : ""}
+            />
 
-          <label htmlFor="fname">Prénom</label>
-          <input
-            type="text"
-            id="fname"
-            name="fname"
-            required="required"
-            autoComplete="off"
-            onChange={(e) => {
-              setFirstName(e.target.value);
-            }}
-            className={firstName === "" ? "empty" : ""}
-          />
+            <label htmlFor="fname">Prénom</label>
+            <input
+              type="text"
+              id="fname"
+              name="fname"
+              required="required"
+              autoComplete="off"
+              onChange={(e) => {
+                setFirstName(e.target.value);
+              }}
+              className={firstName === "" ? "empty" : ""}
+            />
 
-          <label htmlFor="address">Adresse</label>
-          <input
-            type="text"
-            id="address"
-            name="address"
-            required="required"
-            autoComplete="off"
-            onChange={(e) => {
-              setAddress(e.target.value);
-            }}
-            className={address === "" ? "empty" : ""}
-          />
+            <label htmlFor="address">Adresse</label>
+            <input
+              type="text"
+              id="address"
+              name="address"
+              required="required"
+              autoComplete="off"
+              onChange={(e) => {
+                setAddress(e.target.value);
+              }}
+              className={address === "" ? "empty" : ""}
+            />
 
-          <label htmlFor="zipcode">Code Postal</label>
-          <input
-            type="text"
-            id="zipcode"
-            name="zipcode"
-            autoComplete="off"
-            required="required"
-            onChange={(e) => {
-              setZipCode(e.target.value);
-            }}
-            className={zipCode === "" ? "empty" : ""}
-          />
+            <label htmlFor="zipcode">Code Postal</label>
+            <input
+              type="text"
+              id="zipcode"
+              name="zipcode"
+              autoComplete="off"
+              required="required"
+              onChange={(e) => {
+                setZipCode(e.target.value);
+              }}
+              className={zipCode === "" ? "empty" : ""}
+            />
 
-          <label htmlFor="postalCode">Ville</label>
-          <input
-            type="text"
-            id="city"
-            name="city"
-            autoComplete="off"
-            required="required"
-            onChange={(e) => {
-              setCity(e.target.value);
-            }}
-            className={city === "" ? "empty" : ""}
-          />
+            <label htmlFor="city">Ville</label>
+            <input
+              type="text"
+              id="city"
+              name="city"
+              autoComplete="off"
+              required="required"
+              onChange={(e) => {
+                setCity(e.target.value);
+              }}
+              className={city === "" ? "empty" : ""}
+            />
 
-          <label htmlFor="phone">Téléphone</label>
-          <input
-            type="text"
-            id="phone"
-            name="phone"
-            autoComplete="off"
-            required="required"
-            onChange={(e) => {
-              setPhone(e.target.value);
-            }}
-            className={phone === "" ? "empty" : ""}
-          />
+            <label htmlFor="phone">Téléphone</label>
+            <input
+              type="text"
+              id="phone"
+              name="phone"
+              autoComplete="off"
+              required="required"
+              onChange={(e) => {
+                setPhone(e.target.value);
+              }}
+              className={phone === "" ? "empty" : ""}
+            />
 
-          <label htmlFor="age">Age</label>
-          <input
-            type="text"
-            id="age"
-            name="age"
-            autoComplete="off"
-            required="required"
-            onChange={(e) => {
-              setAge(e.target.value);
-            }}
-            className={age === "" ? "empty" : ""}
-          />
+            <label htmlFor="age">Age</label>
+            <input
+              type="text"
+              id="age"
+              name="age"
+              autoComplete="off"
+              required="required"
+              onChange={(e) => {
+                setAge(e.target.value);
+              }}
+              className={age === "" ? "empty" : ""}
+            />
 
-          <input type="submit" value="Inscription" className="submitButton" />
-        </form>
-      )}
-      <p className="error">{error}</p>
-      <p className="success">{success}</p>
-      <p className="changeConnect">
-        Déja inscrit ?&nbsp;<Link to={"../signin"}>Connectez-vous</Link>
-      </p>
+            <input type="submit" value="Inscription" className="submitButton" />
+          </form>
+        )}
+        <p className="error">{error}</p>
+        <p className="success">{success}</p>
+        <p className="changeConnect">
+          Déja inscrit ?&nbsp;<Link to={"../signin"}>Connectez-vous</Link>
+        </p>
+      </div>
     </div>
   );
 };

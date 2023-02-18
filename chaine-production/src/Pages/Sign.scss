@@ -5,6 +5,7 @@
   justify-content: center;
   align-items: center;
   flex-direction: row;
+
   svg {
     width: 30px;
     margin-right: 8px;
@@ -13,18 +14,29 @@
 
 .sign {
   display: flex;
-  align-items: stretch;
-  flex-direction: column;
-  padding: 20px 50px;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding: 0 50px;
   @media (max-width: 600px) {
     padding: 0;
   }
+  .signchild {
+    width: 100%;
+    padding: 25px 0;
+    margin-top: auto;
+    margin-bottom: auto;
+  }
 
+  h3 {
+    margin: 20px 0 30px 0;
+  }
   form {
     display: flex;
     flex-direction: column;
     justify-content: center;
     margin-top: 15px;
+
     label {
       font-weight: const.$semi-bold;
       //largeur du label = largeur du text pas du flex parent
