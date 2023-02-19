@@ -4,6 +4,25 @@ ul {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  margin: 0;
+  padding-top: 10px;
+}
+
+.home {
+  height: 100%;
+  padding: 0 25px;
+  h2 {
+    font-size: 30px;
+    font-weight: const.$regular;
+    color: const.$black;
+    margin: 50px 0 40px 0;
+  }
+  .first {
+    font-weight: const.$semi-bold;
+  }
+  .second {
+    line-height: 40px;
+  }
 }
 .product-container {
   //grid layout for the product card with 2 columns
@@ -34,7 +53,7 @@ ul {
     align-items: center;
     padding: 15px;
     &:hover {
-      transform: scale(1.02);
+      transform: scale(1.04);
     }
 
     .nameInfo {
@@ -43,9 +62,9 @@ ul {
       width: 100%;
 
       h2 {
-        font-size: 20px;
+        font-size: 18px;
         font-weight: const.$semi-bold;
-        margin: 10px 0 0 0;
+        margin: 5px 0 0 0;
       }
       h3 {
         font-size: 14px;
@@ -54,7 +73,68 @@ ul {
     }
   }
   img {
-    width: 80%;
+    width: calc(100% - 50px);
     max-width: 500px;
+  }
+}
+
+.orderBar {
+  position: fixed;
+  bottom: 25px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  justify-items: center;
+  overflow: hidden;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.68);
+  box-shadow: 0px 0px 8px 2px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(8px);
+  /* Note: backdrop-filter has minimal browser support */
+  border-radius: 20px;
+  margin: 5px;
+  padding: 5px 30px;
+  font-weight: const.$semi-bold;
+  width: calc(800px - 120px);
+
+  @media only screen and (max-width: 800px) {
+    width: calc(100% - 120px);
+  }
+
+  @media only screen and (max-width: 430px) {
+    padding: 15px 0px;
+    justify-content: space-around;
+    width: calc(100% - 60px);
+  }
+
+  button {
+    background-color: const.$blue;
+    color: const.$white;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 35px;
+    font-size: 16px;
+    font-weight: const.$regular;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    margin: 5px;
+
+    &:hover {
+      transform: scale(1.04);
+    }
+  }
+
+  .price {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    margin: 5px;
+    svg {
+      padding: 0 15px 0 0;
+      width: 25px;
+      fill: const.$blue;
+    }
   }
 }
