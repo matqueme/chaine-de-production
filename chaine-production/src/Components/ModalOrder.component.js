@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import ModalOrderItem from "./ModalOrderItem.component";
 
 function ModalOrder() {
   const [apiData, setApiData] = useState([
@@ -26,6 +27,18 @@ function ModalOrder() {
       image: null,
       poids: "33",
     },
+    {
+      numero: "2",
+      mail: "mathis.quemener@gmail.com",
+      date: "2023-02-20 18:37:51",
+      id: "2",
+      quantite: "3",
+      quantite_total: "25",
+      nom: "Fanta",
+      prix: "1.5",
+      image: null,
+      poids: "33",
+    },
   ]);
   const [total, setTotal] = useState(0);
 
@@ -35,32 +48,22 @@ function ModalOrder() {
       total += data.prix * data.quantite;
     });
     setTotal(total);
+    setApiData(apiData);
   }, [apiData]);
 
   return (
     <>
-      <div className="modal-order__header">
-        <h2>Commande n°{apiData[0].numero}</h2>
-        <p>Commande passée le {apiData[0].date}</p>
-        {apiData.map((data) => (
-          <div className="modal-order__body" key={data.id}>
-            <div className="modal-order__body__product">
-              <div className="modal-order__body__product__image"></div>
-              <div className="modal-order__body__product__info">
-                <h3>{data.nom}</h3>
-                <p>{data.poids} cl</p>
-              </div>
-            </div>
-            <div className="modal-order__body__quantity">
-              <p>{data.quantite}</p>
-              <p>{data.quantite_total}</p>
-            </div>
-            <div className="modal-order__body__price">
-              <p>{data.prix} €</p>
-            </div>
-          </div>
-        ))}
-        <p>Total : {total} €</p>
+      <h2>Votre panier</h2>
+      {apiData.map((data) => (
+        <ModalOrderItem data={data} key={data.id} />
+      ))}
+      <div className="totaldiv">
+        <p>Total : </p>
+        <p className="total">{total} €</p>
+      </div>
+      <div className="commandeButton">
+        <button className="annuler">Annuler la commande</button>
+        <button className="ajouter">Commander</button>
       </div>
     </>
   );

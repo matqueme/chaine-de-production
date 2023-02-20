@@ -37,6 +37,7 @@
       background-color: const.$lightGray;
       color: const.$white;
       padding: 20px 60px;
+      z-index: 10;
       border: none;
       cursor: pointer;
       //animation: fadeIn 0.5s;
@@ -104,13 +105,6 @@
       .quantiteProduit {
         font-weight: const.$semi-bold;
       }
-      button {
-        padding: 4px 20px;
-        font-size: 24px;
-        border: none;
-        border-radius: 10px;
-        text-align: center;
-      }
       .maxProduit {
         position: absolute;
         right: 0;
@@ -118,6 +112,13 @@
         transform: translate(120%);
         font-size: 14px;
         font-weight: const.$semi-bold;
+      }
+      button {
+        padding: 4px 20px;
+        font-size: 24px;
+        border: none;
+        border-radius: 10px;
+        text-align: center;
       }
 
       .plus {
@@ -140,17 +141,17 @@
     .commandeButton {
       display: flex;
       flex-direction: row;
-      justify-content: center;
+      justify-content: space-around;
       align-items: center;
-      gap: 40px;
-      margin: 40px 0 20px 0;
+      gap: 30px;
+      margin: 50px;
 
       button {
-        padding: 20px 25px;
+        padding: 25px 35px;
         width: 100%;
         border-radius: 15px;
         border: none;
-        font-size: 18px;
+        font-size: 16px;
         font-weight: const.$semi-bold;
         cursor: pointer;
       }
@@ -164,6 +165,113 @@
         background-color: const.$lightGray;
         color: const.$black;
       }
+    }
+  }
+}
+
+.totaldiv {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  font-size: 24px;
+  font-weight: const.$semi-bold;
+  padding-top: 20px;
+  .total {
+    color: const.$blue;
+  }
+}
+
+.orderItem {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: 1fr;
+  width: 100%;
+  padding: 20px 0;
+  @media screen and (max-width: 600px) {
+    grid-template-rows: repeat(2, 1fr);
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+
+  .orderProduct {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+
+    img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      margin-right: 20px;
+    }
+    .text {
+      display: flex;
+      flex-direction: row;
+      align-items: baseline;
+      gap: 5px;
+    }
+
+    h2 {
+      font-size: 18px;
+    }
+    h3 {
+      font-size: 12px;
+    }
+  }
+
+  .orderModif {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 20px;
+    font-weight: const.$semi-bold;
+
+    .quantite {
+      position: relative;
+      display: flex;
+      align-self: center;
+
+      .quantiteProduit {
+        padding: 0 10px;
+      }
+
+      .max {
+        font-size: 12px;
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        transform: translate(calc(50% - 15px), 100%);
+        width: max-content;
+      }
+    }
+
+    button {
+      padding: 4px 20px;
+      font-size: 18px;
+      border: none;
+      border-radius: 8px;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .plus {
+      background-color: const.$blue;
+      color: const.$white;
+      border: 2px solid const.$blue;
+    }
+
+    .moins {
+      background-color: const.$white;
+      color: const.$black;
+      border: 2px solid const.$lightGray;
+    }
+
+    .remove {
+      background-color: const.$red;
+      color: const.$white;
+      border: 2px solid const.$red;
     }
   }
 }
