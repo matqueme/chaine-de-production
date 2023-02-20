@@ -1,4 +1,9 @@
+import { useNavigate, useLocation } from "react-router-dom";
+
 function OrderBar(price) {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   //return the view of the component with the price and a buttun to order
   return (
     <div className="orderBar">
@@ -12,7 +17,11 @@ function OrderBar(price) {
         </svg>
         <p>Total : {price.price} €</p>
       </div>
-      <button>Commander</button>
+      <button
+        onClick={() => navigate(`/order/`, { state: { background: location } })}
+      >
+        Commander
+      </button>
     </div>
   );
 }

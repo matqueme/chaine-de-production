@@ -17,12 +17,9 @@ function App() {
   return (
     <div className="App">
       <Routes location={background || location}>
-        {/* {<Route path="/" element={<Layout />}>}  */}
-        {/* <Route index element={<Home />} />
-        <Route path="blogs" element={<Blogs />} />
-        <Route path="contact" element={<Contact />} /> */}
         <Route path="/" element={<Home />}>
           <Route path="/product/:id" element={<Modal />} />
+          <Route path="/order" element={<Modal />} />
         </Route>
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
@@ -32,11 +29,11 @@ function App() {
 
         <Route path="test" element={<Test />} />
         <Route path="*" element={<Error />} />
-        {/* {</Route>} */}
       </Routes>
       {background && (
         <Routes>
           <Route path="/product/:id" element={<Modal />} />
+          <Route path="/order" element={<Modal />} />
         </Routes>
       )}
     </div>
