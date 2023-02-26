@@ -26,49 +26,20 @@ $num_commande = $param;
 
 if ($requestRessource == "api") {
 
-
     if ($requestMethod == "GET") //si on est sur une méthode get et isen on fait une requette sql pour afficher les différents nom de site_isen
     {
-        /*
-        if ($id == "commande" && $param == NULL) {
-
-            $request = "SELECT c.numero, c.date, c.mail, u.nom, u.prenom, c.id_type AS 'Statut'
-             FROM commande c 
-             JOIN users u ON c.mail = u.mail";
-            $data = dbRequest($db, $request);
-            echo json_encode($data);
-        }
-
-        if ($id == "commande" && $param != NULL) {
-            $request = "SELECT co.numero, p.nom,  co.quantite, CAST(p.prix*co.quantite as DECIMAL(10,2)) AS 'prixtot',p.quantite AS 'stock'
-            FROM contient co 
-            JOIN produit p ON co.id = p.id
-            WHERE co.numero = $param ";
-            $data = dbRequest($db, $request);
-            echo json_encode($data);
-        }
-
-        if ($id == "nbtotal") {
-            $request = "SELECT
-            (SELECT COUNT(*) FROM commande WHERE id_type = 1) as 'atraiter',
-            (SELECT COUNT(*) FROM commande WHERE id_type = 2) as 'continuer',
-            (SELECT COUNT(*) FROM commande WHERE id_type = 4) as 'annulee',
-            (SELECT COUNT(*) FROM commande WHERE id_type = 3) as 'envoirobot'";
-
-            $data = dbRequest($db, $request);
-            echo json_encode($data);
-        }*/
-
         if ($id == "users" && $param == NULL) {
             $request = "SELECT mail, nom, prenom FROM users";
         }
         try {
             header($_SERVER["SERVER_PROTOCOL"]." 200 OK");
+            if($request == NULL)
+                throw new Exception("Request is null");
             $data = dbRequest($db, $request);
             echo json_encode($data);
         } catch (Exception $e) {
             header($_SERVER["SERVER_PROTOCOL"]." 404 Not Found");
-            echo $e;
+            //echo $e;
         }
     }
     if ($requestMethod == "POST") //si on est sur une méthode get et isen on fait une requette sql pour afficher les différents nom de site_isen
@@ -82,7 +53,31 @@ if ($requestRessource == "api") {
                 header($_SERVER["SERVER_PROTOCOL"]." 200 OK");
                 echo "error";
             }
+        }else if($id == "connection"){
+            header($_SERVER["SERVER_PROTOCOL"]." 201 OK");
+            $mail = $_POST['mail'];
+            $password= $_POST['password'];
+            if (checkPassword($db, $mail, $password)) {
+                // si le token n'existe pas on le crée
+                $token = createApiToken($db,$mail);
+                // on renvoie le token et son id
+                echo json_encode(array('api_key' => $token['api_key'], 'auth_key' => $token['auth_key'],'expires' => $token['expires']));
+            } else {
+              header($_SERVER["SERVER_PROTOCOL"]." 200 OK");
+              echo "false";
+            }
+        }else if($id == "tryconnection" && $param == NULL){
+            header($_SERVER["SERVER_PROTOCOL"]." 201 OK");
+            $api_key = $_POST['api_key'];
+            $auth_key = $_POST['auth_key'];
+            if (checkApiToken($db,$api_key,$auth_key)) {
+              echo "true";
+            } else {
+              header($_SERVER["SERVER_PROTOCOL"]." 200 OK");
+            }
+            
         }
+        
     }
 }
 

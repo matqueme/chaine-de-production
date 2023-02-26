@@ -27,6 +27,7 @@ function OrderAccount() {
       <div className="status-order-infos">
         <h2>Commande #4153455 :</h2>
         <p>Le 25/03 à 12h12</p>
+        {isMoreInfo && <p>Produit :</p>}
       </div>
 
       <div className="order-infos" onClick={() => setIsMoreInfo(!isMoreInfo)}>
@@ -64,7 +65,6 @@ function OrderAccount() {
           </>
         )}
       </div>
-      {isMoreInfo && <p>test</p>}
     </div>
   );
 }

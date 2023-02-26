@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-import ModalOrderItem from "./ModalOrderItem.component";
-
+//revoir, test si je fais avec des get/set ou avec des usestate
 function ModalOrder() {
   const [apiData, setApiData] = useState([
     {
@@ -41,6 +40,23 @@ function ModalOrder() {
     },
   ]);
   const [total, setTotal] = useState(0);
+  const [quantite, setQuantite] = useState(() =>
+    apiData.map((item) => parseInt(item.quantite))
+  );
+
+  console.log(quantite);
+  //changer la quantité de produit minimum 1 maximum 99
+  function changeQuantite(e, index) {
+    if (apiData[index].quantite_total < e) {
+      setQuantite(parseInt(apiData[index].quantite_total));
+    } else if (e > 99) {
+      setQuantite(99);
+    } else if (e < 1) {
+      setQuantite(1);
+    } else {
+      setQuantite(e[index]);
+    }
+  }
 
   useEffect(() => {
     let total = 0;
@@ -54,8 +70,36 @@ function ModalOrder() {
   return (
     <>
       <h2>Votre panier</h2>
-      {apiData.map((data) => (
-        <ModalOrderItem data={data} key={data.id} />
+      {apiData.map((data, index) => (
+        <div className="orderItem" key={data.id}>
+          <div className="orderProduct">
+            <img src="/coke-can.png" alt={data.nom} />
+            <div className="text">
+              <h2>{data.nom}</h2>
+              <h3>{data.poids} cl</h3>
+            </div>
+          </div>
+          <div className="orderModif">
+            <button
+              className="moins"
+              onClick={() => changeQuantite(quantite[index] - 1, index)}
+            >
+              -
+            </button>
+            <div className="quantite">
+              <p className="quantiteProduit">{quantite[index]}</p>
+              <p className="max">(Max {data.quantite_total})</p>
+            </div>
+            <button
+              className="plus"
+              onClick={() => changeQuantite(quantite[index] + 1, index)}
+            >
+              +
+            </button>
+            <button className="remove">x</button>
+            {/* <p>{data.prix * data.quantite} €</p> */}
+          </div>
+        </div>
       ))}
       <div className="totaldiv">
         <p>Total : </p>

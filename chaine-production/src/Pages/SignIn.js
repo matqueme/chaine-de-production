@@ -1,10 +1,61 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import NameWebsite from "../Components/NameWesite.component";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import Cookies from "universal-cookie";
 
 const SignIn = () => {
   const [mail, setMail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    //check if the user is already connected
+    const cookies = new Cookies();
+    // axios.defaults.headers.common["Authorization"] =
+    //   "Bearer " + cookies.get("api_key");
+    let data = new FormData();
+    data.append("api_key", cookies.get("api_key"));
+    data.append("auth_key", cookies.get("auth_key"));
+    axios
+      .post("http://projet.local/index/api/tryconnection", data)
+      .then((response) => {
+        if (response.data === true) {
+          //redirect to the home page with react router dom
+          navigate("/");
+        }
+      })
+      .catch(() => {});
+  }, [navigate]);
+
+  function connection(e) {
+    e.preventDefault();
+    let data = new FormData();
+    data.append("mail", mail);
+    data.append("password", password);
+
+    axios
+      .post("http://projet.local/index/api/connection", data)
+      .then((response) => {
+        console.log(response.data);
+        if (response.data !== false) {
+          //create a cookie
+          const cookies = new Cookies();
+          cookies.set("api_key", response.data.api_key, {
+            path: "/",
+            //+1 hour
+            expires: new Date(new Date().getTime() + 3600000),
+          });
+          cookies.set("auth_key", response.data.auth_key, {
+            path: "/",
+            expires: new Date(new Date().getTime() + 3600000),
+          });
+          //redirect to the home page with react router dom
+          navigate("/");
+        }
+      })
+      .catch(() => {});
+  }
 
   return (
     <div className="sign">
@@ -15,14 +66,14 @@ const SignIn = () => {
           Entrez vos informations de connexion pour accéder a votre compte.
         </h3>
 
-        <form>
+        <form onSubmit={connection}>
           <label htmlFor="email">Adresse e-mail</label>
           <input
             type="email"
             id="email"
             name="email"
             onChange={(e) => {
-              setMail(e.target.data);
+              setMail(e.target.value);
             }}
             className={mail === "" ? "empty" : ""}
           />
