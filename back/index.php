@@ -12,6 +12,7 @@ if (!$db) {
 // Send data to the client.
 header('Access-Control-Allow-Headers: *');
 header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: *');
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-control: no-store, no-cache, must-revalidate');
 header('Pragma: no-cache');
@@ -23,7 +24,6 @@ $requestRessource = array_shift($request);
 $id = array_shift($request);
 $param = array_shift($request);
 $num_commande = $param;
-
 if ($requestRessource == "api") {
 
     if ($requestMethod == "GET") //si on est sur une méthode get et isen on fait une requette sql pour afficher les différents nom de site_isen
@@ -79,9 +79,83 @@ if ($requestRessource == "api") {
             } else {
               header($_SERVER["SERVER_PROTOCOL"]." 200 OK");
             }
-            
+             
+        }else if($id =="infouser" && $param == NULL){
+            header($_SERVER["SERVER_PROTOCOL"]." 201 OK");
+            $api_key = $_POST['api_key'];  
+            $auth_key = $_POST['auth_key'];
+            $mail = checkApiToken($db,$api_key,$auth_key);
+            if($mail != false){
+                $request = "SELECT prenom FROM users WHERE mail = '$mail'";
+                $data = dbRequest($db, $request);
+                echo json_encode($data);
+            }else{
+                header($_SERVER["SERVER_PROTOCOL"]." 200 OK");
+                echo "false";
+            }    
+        }else if ($id == "pricecommande" && $param == NULL) {
+            header($_SERVER["SERVER_PROTOCOL"] . " 201 OK");
+            $api_key = $_POST['api_key'];
+            $auth_key = $_POST['auth_key'];
+            $mail = checkApiToken($db, $api_key, $auth_key);
+            if ($mail != false) {
+                $request = "SELECT SUM(co.numero * co.quantite * p.prix) AS prix_total FROM commandes c
+                JOIN contient co ON co.numero = c.numero
+                JOIN produits p ON p.id = co.id
+                WHERE mail = '$mail' AND c.id_type = 1";
+                $data = dbRequest($db, $request);
+                echo json_encode($data);
+            } else {
+                header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
+                echo "false";
+            }
+        }else if ($id == "nbinproduct" && $param == NULL) {
+            header($_SERVER["SERVER_PROTOCOL"] . " 201 OK");
+            $api_key = $_POST['api_key'];
+            $auth_key = $_POST['auth_key'];
+            $id_product = $_POST['id_product'];
+            $mail = checkApiToken($db, $api_key, $auth_key);
+            if ($mail != false) {
+                $request = "SELECT co.quantite FROM commandes c
+                JOIN contient co ON co.numero = c.numero
+                JOIN produits p ON p.id = co.id
+                WHERE mail = '$mail' AND c.id_type = 1 AND p.id = $id_product";
+                $data = dbRequest($db, $request);
+                echo json_encode($data);
+            } else {
+                header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
+                echo "false";
+            }
         }
-        
+        else if ($id == "commande" && $param == NULL) {
+            header($_SERVER["SERVER_PROTOCOL"] . " 201 OK");
+            $api_key = $_POST['api_key'];
+            $auth_key = $_POST['auth_key'];
+            $mail = checkApiToken($db, $api_key, $auth_key);
+            if ($mail != false) {
+                $request = "UPDATE commandes SET id_type = 2
+            WHERE mail = '$mail' AND id_type = 1";
+                $data = dbRequest($db, $request);
+                echo json_encode($data);
+            } else {
+                header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
+                echo "false";
+            }
+        }else if ($id == "annuler" && $param == NULL) {
+            header($_SERVER["SERVER_PROTOCOL"] . " 201 OK");
+            $api_key = $_POST['api_key'];
+            $auth_key = $_POST['auth_key'];
+            $mail = checkApiToken($db, $api_key, $auth_key);
+            if ($mail != false) {
+                $request = "UPDATE commandes SET id_type = 5
+                WHERE mail = '$mail' AND id_type = 1";
+                $data = dbRequest($db, $request);
+                echo json_encode($data);
+            } else {
+                header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
+                echo "false";
+            }
+        }
     }
 }
 

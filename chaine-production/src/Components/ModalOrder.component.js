@@ -1,4 +1,6 @@
+import axios from "axios";
 import { useState, useEffect } from "react";
+import Cookies from "universal-cookie";
 //revoir, test si je fais avec des get/set ou avec des usestate
 function ModalOrder() {
   const [apiData, setApiData] = useState([
@@ -44,7 +46,6 @@ function ModalOrder() {
     apiData.map((item) => parseInt(item.quantite))
   );
 
-  console.log(quantite);
   //changer la quantité de produit minimum 1 maximum 99
   function changeQuantite(e, index) {
     if (apiData[index].quantite_total < e) {
@@ -66,6 +67,22 @@ function ModalOrder() {
     setTotal(total);
     setApiData(apiData);
   }, [apiData]);
+
+  const validationCommande = () => {
+    const fetchData = async () => {
+      let cookies = new Cookies();
+      let formdata = new FormData();
+      formdata.append("api_key", cookies.get("api_key"));
+      formdata.append("auth_key", cookies.get("auth_key"));
+
+      axios
+        .post("http://projet.local/index/api/commande", formdata)
+        .then((res) => {
+          console.log(res);
+        });
+    };
+    fetchData();
+  };
 
   return (
     <>
@@ -107,7 +124,9 @@ function ModalOrder() {
       </div>
       <div className="commandeButton">
         <button className="annuler">Annuler la commande</button>
-        <button className="ajouter">Commander</button>
+        <button className="ajouter" onClick={() => validationCommande()}>
+          Commander
+        </button>
       </div>
     </>
   );
