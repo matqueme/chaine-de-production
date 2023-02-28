@@ -30,6 +30,10 @@ if ($requestRessource == "api") {
     {
         if ($id == "users" && $param == NULL) {
             $request = "SELECT mail, nom, prenom FROM users";
+        } else if($id == "produits" && $param == NULL){
+            $request = "SELECT * FROM produits";
+        } else if($id == "produit" && $param != NULL){
+            $request = "SELECT * FROM produits WHERE id = $param";
         }
         try {
             header($_SERVER["SERVER_PROTOCOL"]." 200 OK");

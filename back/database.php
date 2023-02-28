@@ -111,5 +111,4 @@ function checkApiToken($db, $api_key, $auth_key){
     } else {
         return false;
     }
-   
 }

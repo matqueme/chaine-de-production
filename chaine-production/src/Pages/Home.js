@@ -3,34 +3,23 @@ import ProductCard from "../Components/PoductCard.component";
 import "./Home.scss";
 import OrderBar from "../Components/OrderBar.component";
 import { Link, Outlet, useLocation } from "react-router-dom";
+import axios from "axios";
 
 function Home() {
-  const [api, setApi] = useState([
-    {
-      id: 0,
-      nom: "Coca-cola",
-      image: "coke-can.png",
-      poids: "33 cl",
-    },
-    {
-      id: 1,
-      nom: "Coca-cola",
-      image: "coke-can.png",
-      poids: "33 cl",
-    },
-    {
-      id: 2,
-      nom: "Coca-cola",
-      image: "coke-can.png",
-      poids: "33 cl",
-    },
-    {
-      id: 3,
-      nom: "Coca-cola",
-      image: "coke-can.png",
-      poids: "33 cl",
-    },
-  ]);
+  const [api, setApi] = useState([]);
+  //await
+  useEffect(() => {
+    //recuperer les données de l'api
+    const fetchData = async () => {
+      axios
+        .get("http://projet.local/index/api/produits")
+        .then((response) => {
+          setApi(response.data);
+        })
+        .catch(() => {});
+    };
+    fetchData();
+  }, []);
 
   function test() {
     //ajouter un produit dans le tableau api en utilisant la fonction setApi

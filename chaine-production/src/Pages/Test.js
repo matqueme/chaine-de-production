@@ -1,7 +1,16 @@
+import { useEffect, useState } from "react";
+
 const Test = () => {
+  const [page, setPage] = useState([10, 20, 30, 40, 50]);
+
   const checkpage = (params) => {
     console.log(params);
   };
+
+  useEffect(() => {
+    console.log("test");
+  }, []);
+
   return (
     <label>
       Nombre par page :
@@ -10,11 +19,11 @@ const Test = () => {
           checkpage(e.target.value);
         }}
       >
-        <option value="5">5</option>
-        <option value="10">10</option>
-        <option value="50">50</option>
-        <option value="100">100</option>
-        <option value="500">500</option>
+        {page.map((item) => (
+          <option value={item} key={item}>
+            {item}
+          </option>
+        ))}
       </select>
     </label>
   );

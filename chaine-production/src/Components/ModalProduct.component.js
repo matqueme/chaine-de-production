@@ -1,20 +1,11 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
 
 function ModalProduit() {
   const navigate = useNavigate();
-  const [apiData, setApiData] = useState({
-    id: "0",
-    nom: "Coca-Cola",
-    quantite: "15",
-    prix: "1.5",
-    image: "/coke-can.png",
-    fournisseur: "idk", //sert à rien
-    marque: "Coca-Cola", //sert à rien
-    poids: "33 cl",
-    taille: "33 cl", //sert à rien
-  });
-
+  const param = useParams();
+  const [apiData, setApiData] = useState([]);
   const [quantite, setQuantite] = useState(1);
 
   //changer la quantité de produit minimum 1 maximum 99
@@ -31,6 +22,21 @@ function ModalProduit() {
     //a supprimer apres
     setApiData(apiData);
   }
+
+  //await
+  useEffect(() => {
+    //recuperer les données de l'api
+    const fetchData = async () => {
+      axios
+        .get("http://projet.local/index/api/produit/" + param.id)
+        .then((response) => {
+          setApiData(response.data[0]);
+        })
+        .catch(() => {});
+    };
+    fetchData();
+  }, [param]);
+
   return (
     <>
       <img src={apiData.image} alt={apiData.nom} />

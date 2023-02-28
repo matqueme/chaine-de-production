@@ -16,9 +16,9 @@ function ProductCard({ product }) {
     >
       <div className="nameInfo">
         <h2>{product.nom.toUpperCase()}</h2>
-        <h3>{product.poids}</h3>
+        <h3>{product.poids} cl</h3>
       </div>
-      <img src={"/" + product.image} alt={product.nom} />
+      <img src={product.image} alt={product.nom} />
     </div>
   );
 }
