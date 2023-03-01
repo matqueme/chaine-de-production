@@ -39,7 +39,7 @@ function Home() {
             }
           })
         )
-        .catch(() => {});
+        .catch(() => { });
     };
     fetchData();
   }, [navigate]);
@@ -58,7 +58,7 @@ function Home() {
         .then((response) => {
           setPrice(response.data[0].prix_total);
         })
-        .catch(() => {});
+        .catch(() => { });
     };
     fetchData();
   }, [location]);
@@ -90,7 +90,7 @@ function Home() {
         </ul>
 
         <h2 className="first">Bonjour {prenom}, </h2>
-        <h2 className="second">Comment allez vous ?</h2>
+        <h2 className="second">Comment allez-vous ?</h2>
 
         <div className="product-container">
           {api.map((product) => (

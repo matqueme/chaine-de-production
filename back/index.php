@@ -5,7 +5,7 @@ require_once('database.php');
 // Database connexion.
 $db = dbConnect();
 if (!$db) {
-    header($_SERVER["SERVER_PROTOCOL"]." 503 Service Unavailable");
+    header($_SERVER["SERVER_PROTOCOL"] . " 503 Service Unavailable");
     exit;
 }
 
@@ -30,19 +30,19 @@ if ($requestRessource == "api") {
     {
         if ($id == "users" && $param == NULL) {
             $request = "SELECT mail, nom, prenom FROM users";
-        } else if($id == "produits" && $param == NULL){
+        } else if ($id == "produits" && $param == NULL) {
             $request = "SELECT * FROM produits";
-        } else if($id == "produit" && $param != NULL){
+        } else if ($id == "produit" && $param != NULL) {
             $request = "SELECT * FROM produits WHERE id = $param";
         }
         try {
-            header($_SERVER["SERVER_PROTOCOL"]." 200 OK");
-            if($request == NULL)
+            header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
+            if ($request == NULL)
                 throw new Exception("Request is null");
             $data = dbRequest($db, $request);
             echo json_encode($data);
         } catch (Exception $e) {
-            header($_SERVER["SERVER_PROTOCOL"]." 404 Not Found");
+            header($_SERVER["SERVER_PROTOCOL"] . " 404 Not Found");
             //echo $e;
         }
     }
@@ -50,50 +50,49 @@ if ($requestRessource == "api") {
     {
         if ($id == "addUser" && $param == NULL) {
             try {
-                header($_SERVER["SERVER_PROTOCOL"]." 201 OK");
+                header($_SERVER["SERVER_PROTOCOL"] . " 201 OK");
                 addUser($db, $_POST["mail"], $_POST["nom"], $_POST["prenom"], $_POST["pwd"], $_POST["adresse"], $_POST["age"], $_POST["telephone"]);
                 echo "success";
             } catch (Exception $e) {
-                header($_SERVER["SERVER_PROTOCOL"]." 200 OK");
+                header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
                 echo "error";
             }
-        }else if($id == "connection"){
-            header($_SERVER["SERVER_PROTOCOL"]." 201 OK");
+        } else if ($id == "connection") {
+            header($_SERVER["SERVER_PROTOCOL"] . " 201 OK");
             $mail = $_POST['mail'];
-            $password= $_POST['password'];
+            $password = $_POST['password'];
             if (checkPassword($db, $mail, $password)) {
                 // si le token n'existe pas on le crée
-                $token = createApiToken($db,$mail);
+                $token = createApiToken($db, $mail);
                 // on renvoie le token et son id
-                echo json_encode(array('api_key' => $token['api_key'], 'auth_key' => $token['auth_key'],'expires' => $token['expires']));
+                echo json_encode(array('api_key' => $token['api_key'], 'auth_key' => $token['auth_key'], 'expires' => $token['expires']));
             } else {
-              header($_SERVER["SERVER_PROTOCOL"]." 200 OK");
-              echo "false";
+                header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
+                echo "false";
             }
-        }else if($id == "tryconnection" && $param == NULL){
-            header($_SERVER["SERVER_PROTOCOL"]." 201 OK");
+        } else if ($id == "tryconnection" && $param == NULL) {
+            header($_SERVER["SERVER_PROTOCOL"] . " 201 OK");
             $api_key = $_POST['api_key'];
             $auth_key = $_POST['auth_key'];
-            if (checkApiToken($db,$api_key,$auth_key)) {
-              echo "true";
+            if (checkApiToken($db, $api_key, $auth_key)) {
+                echo "true";
             } else {
-              header($_SERVER["SERVER_PROTOCOL"]." 200 OK");
+                header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
             }
-             
-        }else if($id =="infouser" && $param == NULL){
-            header($_SERVER["SERVER_PROTOCOL"]." 201 OK");
-            $api_key = $_POST['api_key'];  
+        } else if ($id == "infouser" && $param == NULL) {
+            header($_SERVER["SERVER_PROTOCOL"] . " 201 OK");
+            $api_key = $_POST['api_key'];
             $auth_key = $_POST['auth_key'];
-            $mail = checkApiToken($db,$api_key,$auth_key);
-            if($mail != false){
+            $mail = checkApiToken($db, $api_key, $auth_key);
+            if ($mail != false) {
                 $request = "SELECT prenom FROM users WHERE mail = '$mail'";
                 $data = dbRequest($db, $request);
                 echo json_encode($data);
-            }else{
-                header($_SERVER["SERVER_PROTOCOL"]." 200 OK");
+            } else {
+                header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
                 echo "false";
-            }    
-        }else if ($id == "pricecommande" && $param == NULL) {
+            }
+        } else if ($id == "pricecommande" && $param == NULL) {
             header($_SERVER["SERVER_PROTOCOL"] . " 201 OK");
             $api_key = $_POST['api_key'];
             $auth_key = $_POST['auth_key'];
@@ -109,7 +108,7 @@ if ($requestRessource == "api") {
                 header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
                 echo "false";
             }
-        }else if ($id == "nbinproduct" && $param == NULL) {
+        } else if ($id == "nbinproduct" && $param == NULL) {
             header($_SERVER["SERVER_PROTOCOL"] . " 201 OK");
             $api_key = $_POST['api_key'];
             $auth_key = $_POST['auth_key'];
@@ -126,8 +125,7 @@ if ($requestRessource == "api") {
                 header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
                 echo "false";
             }
-        }
-        else if ($id == "commande" && $param == NULL) {
+        } else if ($id == "commande" && $param == NULL) {
             header($_SERVER["SERVER_PROTOCOL"] . " 201 OK");
             $api_key = $_POST['api_key'];
             $auth_key = $_POST['auth_key'];
@@ -141,7 +139,7 @@ if ($requestRessource == "api") {
                 header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
                 echo "false";
             }
-        }else if ($id == "annuler" && $param == NULL) {
+        } else if ($id == "annuler" && $param == NULL) {
             header($_SERVER["SERVER_PROTOCOL"] . " 201 OK");
             $api_key = $_POST['api_key'];
             $auth_key = $_POST['auth_key'];
@@ -151,6 +149,34 @@ if ($requestRessource == "api") {
                 WHERE mail = '$mail' AND id_type = 1";
                 $data = dbRequest($db, $request);
                 echo json_encode($data);
+            } else {
+                header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
+                echo "false";
+            }
+        } else if ($id == "addproduct" && $param == NULL) {
+            header($_SERVER["SERVER_PROTOCOL"] . " 201 OK");
+            $api_key = $_POST['api_key'];
+            $auth_key = $_POST['auth_key'];
+            $mail = checkApiToken($db, $api_key, $auth_key);
+            $id_product = $_POST['id_product'];
+            $nb_product = $_POST['nb_product'];
+            $num_com = $_POST['num_com'];
+
+            if ($mail != false) {
+                $request = "SELECT co.quantite FROM commandes c
+                JOIN contient co ON co.numero = c.numero
+                JOIN produits p ON p.id = co.id
+                WHERE mail = '$mail' AND c.id_type = 1 AND p.id = $id_product";
+                $data = dbRequest($db, $request);
+                if ($data == 0) {
+                    $request = "INSERT IGNORE INTO contient (id,numero,quantite) VALUES ($id_product,$num_com,$nb_product)";
+                    $data = dbRequest($db, $request);
+                    echo json_encode($data);
+                } else {
+                    $request = "UPDATE contient SET quantite = $nb_product WHERE numero = $num_com AND id = $id_product";
+                    $data = dbRequest($db, $request);
+                    echo json_encode($data);
+                }
             } else {
                 header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
                 echo "false";
