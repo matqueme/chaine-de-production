@@ -29,11 +29,12 @@ function Home() {
         ])
         .then(
           axios.spread((data1, data2, data3) => {
-            console.log(data1.data);
             setApi(data1.data);
             if (data2.data !== false || data3.data !== false) {
               setPrenom(data2.data[0].prenom);
-              setPrice(data3.data[0].prix_total);
+              data3.data[0].prix_total !== null
+                ? setPrice(data3.data[0].prix_total)
+                : setPrice("0");
             } else {
               navigate("/signin");
             }

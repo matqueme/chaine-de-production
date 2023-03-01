@@ -98,7 +98,7 @@ if ($requestRessource == "api") {
             $auth_key = $_POST['auth_key'];
             $mail = checkApiToken($db, $api_key, $auth_key);
             if ($mail != false) {
-                $request = "SELECT SUM(co.numero * co.quantite * p.prix) AS prix_total FROM commandes c
+                $request = "SELECT SUM(co.quantite * p.prix) AS prix_total FROM commandes c
                 JOIN contient co ON co.numero = c.numero
                 JOIN produits p ON p.id = co.id
                 WHERE mail = '$mail' AND c.id_type = 1";
@@ -148,6 +148,26 @@ if ($requestRessource == "api") {
                 $request = "UPDATE commandes SET id_type = 5
                 WHERE mail = '$mail' AND id_type = 1";
                 $data = dbRequest($db, $request);
+                echo json_encode($data);
+            } else {
+                header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
+                echo "false";
+            }
+        } else if ($id == "infocommande" && $param == NULL) {
+            header($_SERVER["SERVER_PROTOCOL"] . " 201 OK");
+            $api_key = $_POST['api_key'];
+            $auth_key = $_POST['auth_key'];
+            $mail = checkApiToken($db, $api_key, $auth_key);
+            if ($mail != false) {
+                $request = "SELECT contient.id, contient.quantite, produits.nom, produits.quantite as 'quantite_total' ,
+                produits.prix,produits.image,produits.poids FROM `commandes` 
+                INNER JOIN contient ON contient.numero = commandes.numero 
+                INNER JOIN produits ON produits.id = contient.id 
+                WHERE commandes.mail = :mail AND commandes.id_type = 1;";
+                $smtp = $db->prepare($request);
+                $smtp->bindParam(':mail', $mail, PDO::PARAM_STR);
+                $smtp->execute();
+                $data = $smtp->fetchAll(PDO::FETCH_ASSOC);
                 echo json_encode($data);
             } else {
                 header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");

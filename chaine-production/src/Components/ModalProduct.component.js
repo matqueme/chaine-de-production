@@ -57,7 +57,7 @@ function ModalProduit() {
       <img src={apiData.image} alt={apiData.nom} />
       <div className="infoProduit">
         <h2>{apiData.nom}</h2>
-        <p>{apiData.poids}</p>
+        <p>{apiData.poids} cl</p>
       </div>
       <p className="price">{apiData.prix} €</p>
 
