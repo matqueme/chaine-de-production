@@ -8,6 +8,7 @@ function ModalProduit() {
   const param = useParams();
   const [apiData, setApiData] = useState([]);
   const [quantite, setQuantite] = useState(1);
+  const [isProductInOrder, setIsProductInOrder] = useState(false);
 
   //changer la quantité de produit minimum 1 maximum 99
   function changeQuantite(e) {
@@ -44,6 +45,7 @@ function ModalProduit() {
             setApiData(data1.data[0]);
             if (data2.data[0] !== null) {
               setQuantite(data2.data[0].quantite);
+              setIsProductInOrder(true);
             }
           })
         )
@@ -63,12 +65,25 @@ function ModalProduit() {
       formdata.append("nb_product", quantite);
       axios
         .post("http://projet.local/index/api/addproduct", formdata)
-        .then((data) => {
-          console.log("data", data);
-        });
+        .then((data) => {});
     };
     fetchData();
   }
+
+  const deleteProduct = () => {
+    //fait une fonction asynchrone pour envoyer les données
+    const fetchData = async () => {
+      let cookies = new Cookies();
+      let formdata = new FormData();
+      formdata.append("api_key", cookies.get("api_key"));
+      formdata.append("auth_key", cookies.get("auth_key"));
+      formdata.append("id_product", param.id);
+      axios
+        .post("http://projet.local/index/api/deleteproduct", formdata)
+        .then((data) => {});
+    };
+    fetchData();
+  };
   return (
     <>
       <img src={apiData.image} alt={apiData.nom} />
@@ -100,9 +115,15 @@ function ModalProduit() {
       </div>
 
       <div className="commandeButton">
-        <button className="annuler" onClick={() => navigate("/")}>
-          Annuler
-        </button>
+        {isProductInOrder ? (
+          <button className="supprimer" onClick={() => deleteProduct()}>
+            Supprimer
+          </button>
+        ) : (
+          <button className="annuler" onClick={() => navigate("/")}>
+            Annuler
+          </button>
+        )}
         <button className="ajouter" onClick={() => addToOrder()}>
           Ajouter
         </button>
