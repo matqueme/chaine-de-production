@@ -52,6 +52,23 @@ function ModalProduit() {
     fetchData();
   }, [param]);
 
+  function addToOrder() {
+    //fait une fonction asynchrone pour envoyer les données
+    const fetchData = async () => {
+      let cookies = new Cookies();
+      let formdata = new FormData();
+      formdata.append("api_key", cookies.get("api_key"));
+      formdata.append("auth_key", cookies.get("auth_key"));
+      formdata.append("id_product", param.id);
+      formdata.append("nb_product", quantite);
+      axios
+        .post("http://projet.local/index/api/addproduct", formdata)
+        .then((data) => {
+          console.log("data", data);
+        });
+    };
+    fetchData();
+  }
   return (
     <>
       <img src={apiData.image} alt={apiData.nom} />
@@ -86,7 +103,9 @@ function ModalProduit() {
         <button className="annuler" onClick={() => navigate("/")}>
           Annuler
         </button>
-        <button className="ajouter">Ajouter</button>
+        <button className="ajouter" onClick={() => addToOrder()}>
+          Ajouter
+        </button>
       </div>
     </>
   );

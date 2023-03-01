@@ -180,19 +180,22 @@ if ($requestRessource == "api") {
             $mail = checkApiToken($db, $api_key, $auth_key);
             $id_product = $_POST['id_product'];
             $nb_product = $_POST['nb_product'];
-            $num_com = $_POST['num_com'];
 
             if ($mail != false) {
-                $request = "SELECT co.quantite FROM commandes c
+                $request = "SELECT co.numero, co.quantite FROM commandes c
                 JOIN contient co ON co.numero = c.numero
-                JOIN produits p ON p.id = co.id
-                WHERE mail = '$mail' AND c.id_type = 1 AND p.id = $id_product";
+                WHERE mail = '$mail' AND c.id_type = 1 AND co.id = $id_product";
                 $data = dbRequest($db, $request);
-                if ($data == 0) {
+                if ($data == null) {
+                    $request = "SELECT numero FROM commandes WHERE mail = '$mail' AND id_type = 1";
+                    $data = dbRequest($db, $request);
+                    $num_com = $data[0]['numero'];
                     $request = "INSERT IGNORE INTO contient (id,numero,quantite) VALUES ($id_product,$num_com,$nb_product)";
                     $data = dbRequest($db, $request);
                     echo json_encode($data);
                 } else {
+                    $num_com = $data[0]['numero'];
+                    $data = $data[0]['quantite'];
                     $request = "UPDATE contient SET quantite = $nb_product WHERE numero = $num_com AND id = $id_product";
                     $data = dbRequest($db, $request);
                     echo json_encode($data);

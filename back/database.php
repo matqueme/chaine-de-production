@@ -33,7 +33,7 @@ function dbRequest($db, $request)
         //au cas ou une erreur
     } catch (PDOException $exception) {
         error_log('Request error: ' . $exception->getMessage());
-        return false;
+        return $exception->getMessage();
     }
     //retourne le resultat
     return $result;
