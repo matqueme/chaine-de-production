@@ -40,7 +40,7 @@ function Home() {
             }
           })
         )
-        .catch(() => { });
+        .catch(() => {});
     };
     fetchData();
   }, [navigate]);
@@ -57,9 +57,11 @@ function Home() {
       axios
         .post("http://projet.local/index/api/pricecommande", formdata)
         .then((response) => {
-          setPrice(response.data[0].prix_total);
+          response.data[0].prix_total !== null
+            ? setPrice(response.data[0].prix_total)
+            : setPrice("0");
         })
-        .catch(() => { });
+        .catch(() => {});
     };
     fetchData();
   }, [location]);
