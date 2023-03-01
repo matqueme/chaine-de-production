@@ -1,17 +1,48 @@
+import axios from "axios";
 import React, { useState } from "react";
 
-function OrderAccount() {
+function OrderAccount(props) {
   const [isMoreInfo, setIsMoreInfo] = useState(false);
+  //create a dictionaire pour les status
+  const status = {
+    2: ["blue", "gray", "gray"],
+    3: ["blue", "blue", "gray"],
+    4: ["blue", "blue", "blue"],
+    5: ["gray", "red", "gray"],
+  };
+  const status_text = {
+    2: "La commande est en cours de préparation",
+    3: "Le robot traite votre commande",
+    4: "Votre commande est prête",
+    5: "La commande à été annulée",
+  };
+
+  const [api, setApi] = useState([]);
+
+  function handleClick() {
+    const fetchData = async () => {
+      axios
+        .get("http://projet.local/index/api/commande/" + props.numero_commande)
+        .then((response) => {
+          if (response.data !== false) {
+            if (response.data.length === 0) {
+              setApi([]);
+            } else if (response.data !== api) {
+              setApi(response.data);
+            }
+          }
+        })
+        .catch(() => {});
+    };
+    fetchData();
+  }
 
   return (
     <div className="order-account">
-      <p className="time">
-        Temps estimé : <span>3 min</span>
-      </p>
       <div className="status">
-        <div className="status-item-blue"></div>
-        <div className="status-item-blue"></div>
-        <div className="status-item-gray"></div>
+        {status[props.status_number].map((color, index) => (
+          <div key={index} className={"status-item-" + color}></div>
+        ))}
       </div>
       <div className="status-text-div">
         <div className="circles">
@@ -20,17 +51,53 @@ function OrderAccount() {
           <div className="circle3"></div>
         </div>
         <div className="status-text">
-          <p>Status : En cours</p>
-          <p className="info-robot">Le robot traite votre commande</p>
+          <p>Status : {props.status}</p>
+          <p className="info-robot">{status_text[props.status_number]}</p>
         </div>
       </div>
       <div className="status-order-infos">
-        <h2>Commande #4153455 :</h2>
-        <p>Le 25/03 à 12h12</p>
-        {isMoreInfo && <p>Produit :</p>}
+        <h2>Commande {props.numero_commande}:</h2>
+        {
+          /*display la date en la convertissant en object sous la forme : Le 22/08 à 12h50*/
+          props.date !== null ? (
+            <p>
+              Le{" "}
+              {new Date(props.date)
+                .toLocaleDateString("fr-FR", {
+                  day: "numeric",
+                  month: "numeric",
+                })
+                .replace(" ", "/")}{" "}
+              à{" "}
+              {new Date(props.date)
+
+                .toLocaleTimeString("fr-FR", {
+                  hour: "numeric",
+                  minute: "numeric",
+                })
+                .replace(" ", "h")}
+            </p>
+          ) : (
+            <p>Le 00/00 à 00h00</p>
+          )
+        }
+        {isMoreInfo && (
+          <>
+            <p>Produit :</p>
+            {api.map((product) => (
+              <p key={product.id_produit}>{product.nom}</p>
+            ))}
+          </>
+        )}
       </div>
 
-      <div className="order-infos" onClick={() => setIsMoreInfo(!isMoreInfo)}>
+      <div
+        className="order-infos"
+        onClick={() => {
+          setIsMoreInfo(!isMoreInfo);
+          handleClick();
+        }}
+      >
         {!isMoreInfo ? (
           <>
             <p>Plus d'info</p>

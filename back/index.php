@@ -34,6 +34,11 @@ if ($requestRessource == "api") {
             $request = "SELECT * FROM produits";
         } else if ($id == "produit" && $param != NULL) {
             $request = "SELECT * FROM produits WHERE id = $param";
+        }else if($id == "commande" && $param != NULL){
+            $request = "SELECT * FROM commandes 
+            INNER JOIN contient ON commandes.numero = contient.numero 
+            INNER JOIN produits ON contient.id = produits.id
+            WHERE commandes.numero = '$param'";
         }
         try {
             header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
@@ -64,12 +69,25 @@ if ($requestRessource == "api") {
             if (checkPassword($db, $mail, $password)) {
                 // si le token n'existe pas on le crée
                 $token = createApiToken($db, $mail);
+                //si une commande existe la mettre en annulé
+                $request = "SELECT numero FROM commandes WHERE mail = '$mail' AND id_type = 1";
+                $data = dbRequest($db, $request);
+                if ($data != NULL) {
+                    $request = "UPDATE commandes SET id_type = 5 WHERE numero = " . $data[0]['numero'];
+                    dbRequest($db, $request);
+                }
+                //creation d'une commande
+                $date = date("Y-m-d H:i:s");
+                $request = "INSERT INTO commandes (mail, id_type, date,numero) VALUES ('$mail', 1, '$date', NULL)";
+                dbRequest($db, $request);
+                
                 // on renvoie le token et son id
                 echo json_encode(array('api_key' => $token['api_key'], 'auth_key' => $token['auth_key'], 'expires' => $token['expires']));
             } else {
                 header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
                 echo "false";
             }
+        //si on est deja connecter sur la page de connection
         } else if ($id == "tryconnection" && $param == NULL) {
             header($_SERVER["SERVER_PROTOCOL"] . " 201 OK");
             $api_key = $_POST['api_key'];
@@ -215,6 +233,25 @@ if ($requestRessource == "api") {
                 $data = dbRequest($db, $request);
                 echo json_encode($data);
             } else {
+                header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
+                echo "false";
+            }
+        } else if($id=="account" && $param == NULL){
+            header($_SERVER["SERVER_PROTOCOL"] . " 201 OK");
+            $api_key = $_POST['api_key'];
+            $auth_key = $_POST['auth_key'];
+            $mail = checkApiToken($db, $api_key, $auth_key);
+            if($mail != false){
+                $request = "SELECT commandes.date, commandes.numero, etat.type, commandes.id_type  FROM commandes
+                INNER JOIN etat ON etat.id_type = commandes.id_type
+                WHERE commandes.mail = :mail and commandes.id_type != 1 
+                ORDER BY commandes.date DESC";
+                $smtp = $db->prepare($request);
+                $smtp->bindParam(':mail', $mail, PDO::PARAM_STR);
+                $smtp->execute();
+                $data = $smtp->fetchAll(PDO::FETCH_ASSOC);
+                echo json_encode($data);
+            }else{
                 header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
                 echo "false";
             }

@@ -7,6 +7,7 @@ import Cookies from "universal-cookie";
 const SignIn = () => {
   const [mail, setMail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -37,7 +38,6 @@ const SignIn = () => {
     axios
       .post("http://projet.local/index/api/connection", data)
       .then((response) => {
-        console.log(response.data);
         if (response.data !== false) {
           //create a cookie
           const cookies = new Cookies();
@@ -52,6 +52,8 @@ const SignIn = () => {
           });
           //redirect to the home page with react router dom
           navigate("/");
+        } else {
+          setError("Identifiants incorrects");
         }
       })
       .catch(() => {});
@@ -91,6 +93,7 @@ const SignIn = () => {
 
           <input type="submit" value="Connexion" className="submitButton" />
         </form>
+        <div className="error">{error}</div>
         <p className="changeConnect">
           Pas encore membre ?&nbsp;<Link to={"../signup"}>Inscrivez-vous</Link>
         </p>

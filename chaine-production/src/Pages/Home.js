@@ -57,14 +57,18 @@ function Home() {
       axios
         .post("http://projet.local/index/api/pricecommande", formdata)
         .then((response) => {
-          response.data[0].prix_total !== null
-            ? setPrice(response.data[0].prix_total)
-            : setPrice("0");
+          if (response.data !== false) {
+            response.data[0].prix_total !== null
+              ? setPrice(response.data[0].prix_total)
+              : setPrice("0");
+          } else {
+            navigate("/signin");
+          }
         })
         .catch(() => {});
     };
     fetchData();
-  }, [location]);
+  }, [location, navigate]);
 
   /*----------------------Affichage----------------------*/
 
@@ -77,9 +81,6 @@ function Home() {
           </li>
           <li>
             <Link to="/signup">signup</Link>
-          </li>
-          <li>
-            <Link to="/">home</Link>
           </li>
           <li>
             <Link to="/account">account</Link>

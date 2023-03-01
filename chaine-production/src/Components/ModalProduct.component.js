@@ -7,8 +7,9 @@ function ModalProduit() {
   const navigate = useNavigate();
   const param = useParams();
   const [apiData, setApiData] = useState([]);
-  const [quantite, setQuantite] = useState(1);
+  const [quantite, setQuantite] = useState(0);
   const [isProductInOrder, setIsProductInOrder] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   //changer la quantité de produit minimum 1 maximum 99
   function changeQuantite(e) {
@@ -42,17 +43,21 @@ function ModalProduit() {
         ])
         .then(
           axios.spread((data1, data2) => {
+            if (data1.data === false) {
+              navigate("/signin");
+            }
             setApiData(data1.data[0]);
-            if (data2.data[0] !== null) {
+            if (data2.data.length > 0) {
               setQuantite(data2.data[0].quantite);
               setIsProductInOrder(true);
             }
+            setIsLoaded(true);
           })
         )
         .catch(() => {});
     };
     fetchData();
-  }, [param]);
+  }, [param, navigate]);
 
   function addToOrder() {
     //fait une fonction asynchrone pour envoyer les données
@@ -90,48 +95,54 @@ function ModalProduit() {
   };
   return (
     <>
-      <img src={apiData.image} alt={apiData.nom} />
-      <div className="infoProduit">
-        <h2>{apiData.nom}</h2>
-        <p>{apiData.poids} cl</p>
-      </div>
-      <p className="price">{apiData.prix} €</p>
+      {isLoaded ? (
+        <>
+          <img src={apiData.image} alt={apiData.nom} />
+          <div className="infoProduit">
+            <h2>{apiData.nom}</h2>
+            <p>{apiData.poids} cl</p>
+          </div>
+          <p className="price">{apiData.prix} €</p>
 
-      <div className="ajoutProduit">
-        <button
-          onClick={() => {
-            changeQuantite(quantite - 1);
-          }}
-          className="moins"
-        >
-          -
-        </button>
-        <p className="quantiteProduit">{quantite}</p>
-        <button
-          onClick={() => {
-            changeQuantite(quantite + 1);
-          }}
-          className="plus"
-        >
-          +
-        </button>
-        <p className="maxProduit">(Max {apiData.quantite})</p>
-      </div>
+          <div className="ajoutProduit">
+            <button
+              onClick={() => {
+                changeQuantite(quantite - 1);
+              }}
+              className="moins"
+            >
+              -
+            </button>
+            <p className="quantiteProduit">{quantite}</p>
+            <button
+              onClick={() => {
+                changeQuantite(quantite + 1);
+              }}
+              className="plus"
+            >
+              +
+            </button>
+            <p className="maxProduit">(Max {apiData.quantite})</p>
+          </div>
 
-      <div className="commandeButton">
-        {isProductInOrder ? (
-          <button className="supprimer" onClick={() => deleteProduct()}>
-            Supprimer
-          </button>
-        ) : (
-          <button className="annuler" onClick={() => navigate("/")}>
-            Annuler
-          </button>
-        )}
-        <button className="ajouter" onClick={() => addToOrder()}>
-          Ajouter
-        </button>
-      </div>
+          <div className="commandeButton">
+            {isProductInOrder ? (
+              <button className="supprimer" onClick={() => deleteProduct()}>
+                Supprimer
+              </button>
+            ) : (
+              <button className="annuler" onClick={() => navigate("/")}>
+                Annuler
+              </button>
+            )}
+            <button className="ajouter" onClick={() => addToOrder()}>
+              Ajouter
+            </button>
+          </div>
+        </>
+      ) : (
+        <span className="loader"></span>
+      )}
     </>
   );
 }
