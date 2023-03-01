@@ -65,7 +65,9 @@ function ModalProduit() {
       formdata.append("nb_product", quantite);
       axios
         .post("http://projet.local/index/api/addproduct", formdata)
-        .then((data) => {});
+        .then((data) => {
+          navigate("/");
+        });
     };
     fetchData();
   }
@@ -80,7 +82,9 @@ function ModalProduit() {
       formdata.append("id_product", param.id);
       axios
         .post("http://projet.local/index/api/deleteproduct", formdata)
-        .then((data) => {});
+        .then((data) => {
+          navigate("/");
+        });
     };
     fetchData();
   };
