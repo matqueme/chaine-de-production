@@ -32,7 +32,9 @@ function Home() {
             setApi(data1.data);
             if (data2.data !== false || data3.data !== false) {
               setPrenom(data2.data[0].prenom);
-              setPrice(data3.data[0].prix_total);
+              data3.data[0].prix_total !== null
+                ? setPrice(data3.data[0].prix_total)
+                : setPrice("0");
             } else {
               navigate("/signin");
             }
@@ -89,7 +91,7 @@ function Home() {
         </ul>
 
         <h2 className="first">Bonjour {prenom}, </h2>
-        <h2 className="second">Comment allez vous ?</h2>
+        <h2 className="second">Comment allez-vous ?</h2>
 
         <div className="product-container">
           {api.map((product) => (

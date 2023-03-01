@@ -21,7 +21,6 @@ function ModalOrder() {
       await axios
         .post("http://projet.local/index/api/infocommande", formdata)
         .then((response) => {
-          console.log(response.data);
           if (response.data === false) {
             navigate("/signin");
           } else {
@@ -62,19 +61,23 @@ function ModalOrder() {
 
   useEffect(() => {
     let total = 0;
-    apiData.forEach((data) => {
-      total += data.prix * data.quantite;
+    apiData.forEach((data, index) => {
+      total += data.prix * quantite[index];
     });
     setTotal(total);
-  }, [apiData]);
+  }, [apiData, quantite]);
 
   const validationCommande = () => {
     const fetchData = async () => {
-      let cookies = new Cookies();
-      let formdata = new FormData();
-      formdata.append("api_key", cookies.get("api_key"));
-      formdata.append("auth_key", cookies.get("auth_key"));
-      axios.post("http://projet.local/index/api/commande", formdata);
+      if (total !== 0) {
+        let cookies = new Cookies();
+        let formdata = new FormData();
+        formdata.append("api_key", cookies.get("api_key"));
+        formdata.append("auth_key", cookies.get("auth_key"));
+        axios.post("http://projet.local/index/api/commande", formdata);
+      } else {
+        console.log("object");
+      }
     };
     fetchData();
   };
@@ -136,7 +139,7 @@ function ModalOrder() {
           </div>
         </>
       ) : (
-        <span class="loader"></span>
+        <span className="loader"></span>
       )}
     </>
   );
