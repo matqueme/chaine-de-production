@@ -204,6 +204,20 @@ if ($requestRessource == "api") {
                 header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
                 echo "false";
             }
+        } else if ($id == "deleteproduct" && $param == NULL) {
+            header($_SERVER["SERVER_PROTOCOL"] . " 201 OK");
+            $api_key = $_POST['api_key'];
+            $auth_key = $_POST['auth_key'];
+            $mail = checkApiToken($db, $api_key, $auth_key);
+            $id_product = $_POST['id_product'];
+            if ($mail != false) {
+                $request = "DELETE FROM contient where id = $id_product";
+                $data = dbRequest($db, $request);
+                echo json_encode($data);
+            } else {
+                header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
+                echo "false";
+            }
         }
     }
 }
