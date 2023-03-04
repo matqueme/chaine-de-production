@@ -15,7 +15,9 @@ function Home() {
   const [price, setPrice] = useState("0");
   const [animation, setAnimation] = useState(false);
   const [animationfade, setAnimationfade] = useState(false);
-  //await
+  const [modalText, setModalText] = useState("");
+
+  //useeffect pour recuperer les données de l'api
   useEffect(() => {
     //recuperer les données de l'api
     const fetchData = async () => {
@@ -64,9 +66,12 @@ function Home() {
           if (response.data !== false) {
             if (
               response.data[0].prix_total !== null &&
-              response.data[0].prix_total !== price &&
-              response.data[0].prix_total >= price
+              response.data[0].prix_total !== price
             ) {
+              response.data[0].prix_total > price &&
+                setModalText("Produit ajouté");
+              response.data[0].prix_total < price &&
+                setModalText("Commande modifiée");
               setAnimation(true);
               setAnimationfade(true);
             }
@@ -82,6 +87,7 @@ function Home() {
     fetchData();
   }, [location, navigate, price]);
 
+  //useeffect pour l'animation de l'ajout de produit dans le panier
   useEffect(() => {
     const timer = setTimeout(() => {
       setAnimationfade(false);
@@ -130,7 +136,7 @@ function Home() {
         >
           {animation && (
             <div className="lottie">
-              <h2>Produit ajouté</h2>
+              <h2>{modalText}</h2>
               <Lottie
                 animationData={animationData}
                 height={150}
