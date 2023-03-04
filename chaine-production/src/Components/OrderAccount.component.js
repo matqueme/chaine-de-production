@@ -18,6 +18,7 @@ function OrderAccount(props) {
   };
 
   const [api, setApi] = useState([]);
+  const [totalprix, setTotalprix] = useState(0);
 
   function handleClick() {
     const fetchData = async () => {
@@ -25,10 +26,16 @@ function OrderAccount(props) {
         .get("http://projet.local/index/api/commande/" + props.numero_commande)
         .then((response) => {
           if (response.data !== false) {
+            console.log(response.data);
             if (response.data.length === 0) {
               setApi([]);
             } else if (response.data !== api) {
               setApi(response.data);
+              let total = 0;
+              response.data.forEach((product) => {
+                total += product.prix * product.quantite;
+              });
+              setTotalprix(total);
             }
           }
         })
@@ -83,10 +90,22 @@ function OrderAccount(props) {
         }
         {isMoreInfo && (
           <>
-            <p>Produit :</p>
+            <div className="ligne">
+              <div></div>
+            </div>
+            <h2>Produit :</h2>
             {api.map((product) => (
-              <p key={product.id_produit}>{product.nom}</p>
+              <div key={product.id} className="infoProduct">
+                <p>
+                  {product.quantite} x {product.nom}
+                </p>
+                {/*affiche le prix de chaque produit en le convertissant en int */}
+                <p>{product.prix * product.quantite} €</p>
+              </div>
             ))}
+            <p className="total-price">
+              Total : <span>{totalprix} €</span>
+            </p>
           </>
         )}
       </div>

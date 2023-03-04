@@ -123,7 +123,6 @@ function ModalOrder() {
                 <button className="remove" onClick={() => removeItem(index)}>
                   x
                 </button>
-                {/* <p>{data.prix * data.quantite} €</p> */}
               </div>
             </div>
           ))}

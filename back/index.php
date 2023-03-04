@@ -35,10 +35,9 @@ if ($requestRessource == "api") {
         } else if ($id == "produit" && $param != NULL) {
             $request = "SELECT * FROM produits WHERE id = $param";
         }else if($id == "commande" && $param != NULL){
-            $request = "SELECT * FROM commandes 
-            INNER JOIN contient ON commandes.numero = contient.numero 
+            $request = "SELECT produits.id, contient.quantite, produits.nom, produits.prix, produits.poids FROM contient 
             INNER JOIN produits ON contient.id = produits.id
-            WHERE commandes.numero = '$param'";
+            WHERE contient.numero = '$param'";
         }
         try {
             header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");

@@ -119,6 +119,39 @@
     font-weight: const.$regular;
     margin: 10px;
   }
+  .ligne {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 2px;
+    div {
+      width: 50%;
+      background-color: const.$lightGray;
+      height: 2px;
+      align-self: center;
+    }
+  }
+
+  .infoProduct {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    p {
+      margin: 6px 10px;
+    }
+  }
+
+  .total-price {
+    font-weight: const.$semi-bold;
+    display: flex;
+    justify-content: flex-end;
+
+    span {
+      padding-left: 5px;
+      color: const.$blue2;
+    }
+  }
 }
 
 .order-infos {
