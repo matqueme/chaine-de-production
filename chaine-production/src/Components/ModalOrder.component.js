@@ -51,12 +51,41 @@ function ModalOrder() {
       array[index] = e;
       setQuantite(array);
     }
+
+    let cookies = new Cookies();
+    let formdata = new FormData();
+    formdata.append("api_key", cookies.get("api_key"));
+    formdata.append("auth_key", cookies.get("auth_key"));
+    formdata.append("id_product", apiData[index].id);
+    formdata.append("quantite", e);
+
+    axios
+      .post("http://projet.local/index/api/updateProduct", formdata)
+      .then((response) => {
+        if (response.data === false) {
+          navigate("/signin");
+        }
+      });
   }
 
   function removeItem(index) {
     const array = [...apiData];
     array.splice(index, 1);
     setApiData(array);
+
+    let cookies = new Cookies();
+    let formdata = new FormData();
+    formdata.append("api_key", cookies.get("api_key"));
+    formdata.append("auth_key", cookies.get("auth_key"));
+    formdata.append("id_product", apiData[index].id);
+
+    axios
+      .post("http://projet.local/index/api/deleteProduct", formdata)
+      .then((response) => {
+        if (response.data === false) {
+          navigate("/signin");
+        }
+      });
   }
 
   useEffect(() => {

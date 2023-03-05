@@ -58,7 +58,7 @@ function addUser($db, $mail, $nom, $prenom, $pwd, $adresse, $age, $telephone)
 //fonction pour verifier si l'utilisateur existe et si le mot de passe est correct
 function checkPassword($db, $mail, $pwd)
 {
-    $request = "SELECT mail, pwd FROM users WHERE mail = :mail";
+    $request = "SELECT pwd FROM users WHERE mail = :mail";
     $stmt = $db->prepare($request);
     $stmt->bindParam(':mail', $mail, PDO::PARAM_STR);
     $stmt->execute();
