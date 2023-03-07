@@ -9,6 +9,7 @@ import Account from "./Pages/Account";
 import AllAccount from "./Pages/AllAccount";
 import { useLocation } from "react-router-dom";
 import Modal from "./Components/Modal.component";
+import OrderReview from "./Pages/OrderReview";
 
 function App() {
   const location = useLocation();
@@ -26,6 +27,7 @@ function App() {
         <Route path="/order" element={<Home />} />
         <Route path="/account" element={<Account />} />
         <Route path="/allaccount" element={<AllAccount />} />
+        <Route path="/orderReview" element={<OrderReview />} />
 
         <Route path="test" element={<Test />} />
         <Route path="*" element={<Error />} />

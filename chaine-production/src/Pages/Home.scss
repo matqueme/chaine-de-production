@@ -15,7 +15,7 @@ ul {
     font-size: 30px;
     font-weight: const.$regular;
     color: const.$black;
-    margin: 50px 0 40px 0;
+    margin: 30px 0 20px 0;
   }
   .first {
     font-weight: const.$semi-bold;
@@ -194,5 +194,19 @@ ul {
   }
   to {
     opacity: 0;
+  }
+}
+
+.home__container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 30px;
+
+  svg {
+    align-self: center;
+    fill: const.$blue;
+    margin-right: 10px;
+    cursor: pointer;
   }
 }

@@ -353,6 +353,29 @@ if ($requestRessource == "api") {
                 header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
                 echo "false";
             }
+        }else if ($id == "simpleconnexion" && $param ==NULL){
+            $mail = $_POST['mail'];
+            $token = createApiToken($db, $mail);
+            //si une commande existe la mettre en annulé
+            $request = "SELECT numero FROM commandes WHERE mail = '$mail' AND id_type = 1";
+            $data = dbRequest($db, $request);
+            if ($data != NULL) {
+                $request = "UPDATE commandes SET id_type = 5 WHERE numero = " . $data[0]['numero'];
+                dbRequest($db, $request);
+            }
+            
+            //creation d'une commande
+            $date = date("Y-m-d H:i:s");
+            $request = "INSERT INTO commandes (mail, id_type, date,numero) VALUES (:mail, 1, :date , NULL)";
+            $stmt = $db->prepare($request);
+            $stmt->bindParam(':mail', $mail, PDO::PARAM_STR);
+            $stmt->bindParam(':date', $date, PDO::PARAM_STR);
+            $stmt->execute();
+
+            // on renvoie le token et son id
+            echo json_encode(array('api_key' => $token['api_key'], 'auth_key' => $token['auth_key'], 'expires' => $token['expires']));
+            header($_SERVER['SERVER_PROTOCOL'] . ' 200 OK');
+
         }
     }
 }

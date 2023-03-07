@@ -1,6 +1,24 @@
+import axios from "axios";
+import Cookies from "universal-cookie";
+import { useNavigate } from "react-router-dom";
 const UserCard = (props) => {
+  let navigate = useNavigate();
+  const handleClick = () => {
+    let formdata = new FormData();
+    formdata.append("mail", props.account.mail);
+    axios
+      .post("http://projet.local/index/api/simpleconnexion", formdata)
+      .then((response) => {
+        let cookies = new Cookies();
+        cookies.set("api_key", response.data.api_key, { path: "/" });
+        cookies.set("auth_key", response.data.auth_key, { path: "/" });
+        //Redirection vers la page d'accueil avec react router dom
+        navigate("/home");
+      });
+  };
+
   return (
-    <div className="user-card">
+    <div className="user-card" onClick={handleClick}>
       <div className="user-card__info">
         <div className="user-card__name">
           <p>{props.account.prenom}&nbsp;</p>

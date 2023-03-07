@@ -104,8 +104,7 @@ function ModalOrder() {
         formdata.append("api_key", cookies.get("api_key"));
         formdata.append("auth_key", cookies.get("auth_key"));
         axios.post("http://projet.local/index/api/commande", formdata);
-      } else {
-        navigate("/account");
+        navigate("/order");
       }
     };
     fetchData();
