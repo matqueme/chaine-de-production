@@ -169,6 +169,29 @@ ul {
     color: const.$black;
     text-align: center;
   }
+  p {
+    text-align: center;
+    margin: 0 15px;
+    font-size: 18px;
+  }
+
+  button {
+    background-color: const.$blue;
+    color: const.$white;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 35px;
+    font-size: 16px;
+    font-weight: const.$regular;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    margin: 5px;
+
+    &:hover {
+      transform: scale(1.04);
+    }
+  }
 }
 
 .fade-in {
