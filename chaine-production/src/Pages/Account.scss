@@ -9,12 +9,46 @@
     aspect-ratio: 1/1;
     margin: 10px;
   }
+
   .title-account {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: flex-start;
     margin-bottom: 40px;
+  }
+}
+
+.infouser {
+  font-size: 16px;
+  color: const.$black 1px solid;
+  font-weight: const.$regular;
+
+  h4 {
+    margin: 5px;
+  }
+
+  .horizontal {
+    display: flex;
+    flex-direction: row;
+    text-align: left;
+    gap: 100px;
+    margin-bottom: 15px;
+
+  }
+
+  .vertical {
+    display: flex;
+    flex-direction: column;
+  }
+
+  p {
+    width: 130%;
+    text-align: center;
+    background-color: const.$lightGray;
+    border: const.$lightGray 2px solid;
+    border-radius: 5px;
+    border-width: 0.5em;
   }
 }
 
@@ -37,11 +71,13 @@
   justify-content: space-between;
   align-self: center;
   padding: 15px;
+
   div {
     width: 28%;
     height: 5px;
     border-radius: 10px;
   }
+
   .status-item-blue {
     background-color: const.$blue2;
   }
@@ -95,11 +131,13 @@
       transform: scale(0.4);
       opacity: 1;
     }
+
     .circle2 {
       transform: scale(0.7);
 
       opacity: 0.5;
     }
+
     .circle3 {
       transform: scale(1);
       opacity: 0.2;
@@ -109,22 +147,26 @@
 
 .status-order-infos {
   margin: 5px 0 30px 0;
+
   h2 {
     font-size: 18px;
     font-weight: const.$semi-bold;
     margin: 10px;
   }
+
   p {
     font-size: 16px;
     font-weight: const.$regular;
     margin: 10px;
   }
+
   .ligne {
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
     height: 2px;
+
     div {
       width: 50%;
       background-color: const.$lightGray;
@@ -137,6 +179,7 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+
     p {
       margin: 6px 10px;
     }
@@ -166,6 +209,7 @@
   flex-direction: row;
   align-items: center;
   cursor: pointer;
+
   svg {
     margin-left: 10px;
     height: 10px;

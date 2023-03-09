@@ -78,8 +78,8 @@ const SignUp = () => {
     <div className="sign">
       <div className="signchild">
         <NameWebsite />
-        <h2>Insciption</h2>
-        <h3>Créer un compte pour accéder a toutes nos fonctionnalités.</h3>
+        <h2>Inscription</h2>
+        <h3>Créez un compte pour accéder à toutes nos fonctionnalités.</h3>
 
         {isSetMail ? (
           <form onSubmit={handleSubmit}>

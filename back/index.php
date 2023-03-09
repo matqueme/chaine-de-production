@@ -40,6 +40,13 @@ if ($requestRessource == "api") {
                     $stmt->execute();
                     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     break;
+                case "infodetails":
+                    $mail = $_GET["mail"];
+                    $stmt = $db->prepare("SELECT nom, prenom, adresse, telephone, age FROM users WHERE mail = :mail");
+                    $stmt->bindParam(':mail', $mail, PDO::PARAM_STR);
+                    $stmt->execute();
+                    $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    break;
                 case "produits":
                     $stmt = $db->prepare("SELECT * FROM produits");
                     $stmt->execute();
@@ -101,7 +108,7 @@ if ($requestRessource == "api") {
 
             case 'connection':
                 try {
-                
+
                     $mail = filter_var($_POST['mail'], FILTER_SANITIZE_EMAIL);
                     $password = $_POST['password'];
 
@@ -115,7 +122,7 @@ if ($requestRessource == "api") {
                             $request = "UPDATE commandes SET id_type = 5 WHERE numero = " . $data[0]['numero'];
                             dbRequest($db, $request);
                         }
-                        
+
                         //creation d'une commande
                         $date = date("Y-m-d H:i:s");
                         $request = "INSERT INTO commandes (mail, id_type, date,numero) VALUES (:mail, 1, :date , NULL)";
@@ -131,14 +138,12 @@ if ($requestRessource == "api") {
                         header($_SERVER['SERVER_PROTOCOL'] . ' 401 Unauthorized');
                         echo "false";
                     }
-
-                }
-                catch (PDOException $e) {
+                } catch (PDOException $e) {
                     header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error');
                 }
                 break;
-            
-            //si on est deja connecter sur la page de connection
+
+                //si on est deja connecter sur la page de connection
             case 'tryconnection':
                 try {
                     if (isset($_POST['api_key']) && isset($_POST['auth_key'])) {
@@ -149,11 +154,10 @@ if ($requestRessource == "api") {
                         } else {
                             header($_SERVER['SERVER_PROTOCOL'] . ' 401 Unauthorized');
                         }
-                    }else {
+                    } else {
                         header($_SERVER['SERVER_PROTOCOL'] . ' 400 Bad Request');
                     }
-                }
-                catch (PDOException $e) {
+                } catch (PDOException $e) {
                     header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error');
                 }
                 break;
@@ -298,12 +302,12 @@ if ($requestRessource == "api") {
                 header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
                 echo "false";
             }
-        } else if($id=="account" && $param == NULL){
+        } else if ($id == "account" && $param == NULL) {
             header($_SERVER["SERVER_PROTOCOL"] . " 201 OK");
             $api_key = $_POST['api_key'];
             $auth_key = $_POST['auth_key'];
             $mail = checkApiToken($db, $api_key, $auth_key);
-            if($mail != false){
+            if ($mail != false) {
                 $request = "SELECT commandes.date, commandes.numero, etat.type, commandes.id_type  FROM commandes
                 INNER JOIN etat ON etat.id_type = commandes.id_type
                 WHERE commandes.mail = :mail and commandes.id_type != 1 
@@ -313,11 +317,11 @@ if ($requestRessource == "api") {
                 $smtp->execute();
                 $data = $smtp->fetchAll(PDO::FETCH_ASSOC);
                 echo json_encode($data);
-            }else{
+            } else {
                 header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
                 echo "false";
             }
-        }else if ($id == "deleteProduct" && $param == NULL) {
+        } else if ($id == "deleteProduct" && $param == NULL) {
             $api_key = $_POST['api_key'];
             $auth_key = $_POST['auth_key'];
             $mail = checkApiToken($db, $api_key, $auth_key);
@@ -326,7 +330,7 @@ if ($requestRessource == "api") {
                 $request = "DELETE FROM contient WHERE id = :id_product AND numero = ( SELECT numero FROM commandes WHERE mail = :mail AND id_type = 1);";
                 $smtp = $db->prepare($request);
                 $smtp->bindParam(':id_product', $id_product, PDO::PARAM_STR);
-                $smtp->bindParam(':mail', $mail, PDO::PARAM_STR);   
+                $smtp->bindParam(':mail', $mail, PDO::PARAM_STR);
                 $smtp->execute();
                 $data = $smtp->fetchAll(PDO::FETCH_ASSOC);
                 echo json_encode("true");
@@ -334,7 +338,7 @@ if ($requestRessource == "api") {
                 header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
                 echo "false";
             }
-        } else if($id=="updateProduct" && $param == NULL){
+        } else if ($id == "updateProduct" && $param == NULL) {
             $api_key = $_POST['api_key'];
             $auth_key = $_POST['auth_key'];
             $mail = checkApiToken($db, $api_key, $auth_key);
@@ -353,7 +357,7 @@ if ($requestRessource == "api") {
                 header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
                 echo "false";
             }
-        }else if ($id == "simpleconnexion" && $param ==NULL){
+        } else if ($id == "simpleconnexion" && $param == NULL) {
             $mail = $_POST['mail'];
             $token = createApiToken($db, $mail);
             //si une commande existe la mettre en annulé
@@ -363,7 +367,7 @@ if ($requestRessource == "api") {
                 $request = "UPDATE commandes SET id_type = 5 WHERE numero = " . $data[0]['numero'];
                 dbRequest($db, $request);
             }
-            
+
             //creation d'une commande
             $date = date("Y-m-d H:i:s");
             $request = "INSERT INTO commandes (mail, id_type, date,numero) VALUES (:mail, 1, :date , NULL)";
@@ -375,7 +379,6 @@ if ($requestRessource == "api") {
             // on renvoie le token et son id
             echo json_encode(array('api_key' => $token['api_key'], 'auth_key' => $token['auth_key'], 'expires' => $token['expires']));
             header($_SERVER['SERVER_PROTOCOL'] . ' 200 OK');
-
         }
     }
 }
