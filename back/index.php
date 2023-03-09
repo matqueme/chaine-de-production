@@ -40,13 +40,6 @@ if ($requestRessource == "api") {
                     $stmt->execute();
                     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     break;
-                case "infodetails":
-                    $mail = $_GET["mail"];
-                    $stmt = $db->prepare("SELECT nom, prenom, adresse, telephone, age FROM users WHERE mail = :mail");
-                    $stmt->bindParam(':mail', $mail, PDO::PARAM_STR);
-                    $stmt->execute();
-                    $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                    break;
                 case "produits":
                     $stmt = $db->prepare("SELECT * FROM produits");
                     $stmt->execute();
@@ -89,13 +82,13 @@ if ($requestRessource == "api") {
         switch ($id) {
             case 'addUser':
                 try {
-                    $mail = filter_var($_POST['mail'], FILTER_SANITIZE_EMAIL);
-                    $nom = filter_var($_POST['nom'], FILTER_SANITIZE_STRING);
-                    $prenom = filter_var($_POST['prenom'], FILTER_SANITIZE_STRING);
-                    $pwd = password_hash($_POST['pwd'], PASSWORD_DEFAULT);
-                    $adresse = filter_var($_POST['adresse'], FILTER_SANITIZE_STRING);
-                    $age = filter_var($_POST['age'], FILTER_SANITIZE_NUMBER_INT);
-                    $telephone = filter_var($_POST['telephone'], FILTER_SANITIZE_STRING);
+                    $mail = filter_input(INPUT_POST, 'mail', FILTER_SANITIZE_EMAIL);
+                    $nom = filter_input(INPUT_POST, 'nom', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                    $prenom = filter_input(INPUT_POST, 'prenom', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                    $pwd = password_hash(filter_input(INPUT_POST, 'pwd', FILTER_SANITIZE_SPECIAL_CHARS), PASSWORD_DEFAULT);
+                    $adresse = filter_input(INPUT_POST, 'adresse', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                    $age = filter_input(INPUT_POST, 'age', FILTER_SANITIZE_NUMBER_INT);
+                    $telephone = filter_input(INPUT_POST, 'telephone', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
                     addUser($db,  $mail, $nom, $prenom, $pwd, $adresse, $age, $telephone);
                     header($_SERVER["SERVER_PROTOCOL"] . " 201 Created");
@@ -161,225 +154,380 @@ if ($requestRessource == "api") {
                     header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error');
                 }
                 break;
-        }
 
-        if ($id == "infouser" && $param == NULL) {
-            header($_SERVER["SERVER_PROTOCOL"] . " 201 OK");
-            $api_key = $_POST['api_key'];
-            $auth_key = $_POST['auth_key'];
-            $mail = checkApiToken($db, $api_key, $auth_key);
-            if ($mail != false) {
-                $request = "SELECT prenom FROM users WHERE mail = '$mail'";
-                $data = dbRequest($db, $request);
-                echo json_encode($data);
-            } else {
-                header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
-                echo "false";
-            }
-        } else if ($id == "pricecommande" && $param == NULL) {
-            header($_SERVER["SERVER_PROTOCOL"] . " 201 OK");
-            $api_key = $_POST['api_key'];
-            $auth_key = $_POST['auth_key'];
-            $mail = checkApiToken($db, $api_key, $auth_key);
-            if ($mail != false) {
-                $request = "SELECT SUM(co.quantite * p.prix) AS prix_total FROM commandes c
-                JOIN contient co ON co.numero = c.numero
-                JOIN produits p ON p.id = co.id
-                WHERE mail = '$mail' AND c.id_type = 1";
-                $data = dbRequest($db, $request);
-                echo json_encode($data);
-            } else {
-                header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
-                echo "false";
-            }
-        } else if ($id == "nbinproduct" && $param == NULL) {
-            header($_SERVER["SERVER_PROTOCOL"] . " 201 OK");
-            $api_key = $_POST['api_key'];
-            $auth_key = $_POST['auth_key'];
-            $id_product = $_POST['id_product'];
-            $mail = checkApiToken($db, $api_key, $auth_key);
-            if ($mail != false) {
-                $request = "SELECT co.quantite FROM commandes c
-                JOIN contient co ON co.numero = c.numero
-                JOIN produits p ON p.id = co.id
-                WHERE mail = '$mail' AND c.id_type = 1 AND p.id = $id_product";
-                $data = dbRequest($db, $request);
-                echo json_encode($data);
-            } else {
-                header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
-                echo "false";
-            }
-        } else if ($id == "commande" && $param == NULL) {
-            header($_SERVER["SERVER_PROTOCOL"] . " 201 OK");
-            $api_key = $_POST['api_key'];
-            $auth_key = $_POST['auth_key'];
-            $mail = checkApiToken($db, $api_key, $auth_key);
-            if ($mail != false) {
-                $request = "UPDATE commandes SET id_type = 2
-            WHERE mail = '$mail' AND id_type = 1";
-                $data = dbRequest($db, $request);
-                echo json_encode($data);
-            } else {
-                header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
-                echo "false";
-            }
-        } else if ($id == "annuler" && $param == NULL) {
-            header($_SERVER["SERVER_PROTOCOL"] . " 201 OK");
-            $api_key = $_POST['api_key'];
-            $auth_key = $_POST['auth_key'];
-            $mail = checkApiToken($db, $api_key, $auth_key);
-            if ($mail != false) {
-                $request = "UPDATE commandes SET id_type = 5
-                WHERE mail = '$mail' AND id_type = 1";
-                $data = dbRequest($db, $request);
-                echo json_encode($data);
-            } else {
-                header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
-                echo "false";
-            }
-        } else if ($id == "infocommande" && $param == NULL) {
-            header($_SERVER["SERVER_PROTOCOL"] . " 201 OK");
-            $api_key = $_POST['api_key'];
-            $auth_key = $_POST['auth_key'];
-            $mail = checkApiToken($db, $api_key, $auth_key);
-            if ($mail != false) {
-                $request = "SELECT contient.id, contient.quantite, produits.nom, produits.quantite as 'quantite_total' ,
-                produits.prix,produits.image,produits.poids FROM `commandes` 
-                INNER JOIN contient ON contient.numero = commandes.numero 
-                INNER JOIN produits ON produits.id = contient.id 
-                WHERE commandes.mail = :mail AND commandes.id_type = 1;";
-                $smtp = $db->prepare($request);
-                $smtp->bindParam(':mail', $mail, PDO::PARAM_STR);
-                $smtp->execute();
-                $data = $smtp->fetchAll(PDO::FETCH_ASSOC);
-                echo json_encode($data);
-            } else {
-                header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
-                echo "false";
-            }
-        } else if ($id == "addproduct" && $param == NULL) {
-            header($_SERVER["SERVER_PROTOCOL"] . " 201 OK");
-            $api_key = $_POST['api_key'];
-            $auth_key = $_POST['auth_key'];
-            $mail = checkApiToken($db, $api_key, $auth_key);
-            $id_product = $_POST['id_product'];
-            $nb_product = $_POST['nb_product'];
-
-            if ($mail != false) {
-                $request = "SELECT co.numero, co.quantite FROM commandes c
-                JOIN contient co ON co.numero = c.numero
-                WHERE mail = '$mail' AND c.id_type = 1 AND co.id = $id_product";
-                $data = dbRequest($db, $request);
-                if ($data == null) {
-                    $request = "SELECT numero FROM commandes WHERE mail = '$mail' AND id_type = 1";
-                    $data = dbRequest($db, $request);
-                    $num_com = $data[0]['numero'];
-                    $request = "INSERT IGNORE INTO contient (id,numero,quantite) VALUES ($id_product,$num_com,$nb_product)";
-                    $data = dbRequest($db, $request);
-                    echo json_encode($data);
-                } else {
-                    $num_com = $data[0]['numero'];
-                    $data = $data[0]['quantite'];
-                    $request = "UPDATE contient SET quantite = $nb_product WHERE numero = $num_com AND id = $id_product";
-                    $data = dbRequest($db, $request);
-                    echo json_encode($data);
+            case 'infouser' :
+                try{
+                    if(isset($_POST['api_key']) && isset($_POST['auth_key'])){
+                        $api_key = $_POST['api_key'];
+                        $auth_key = $_POST['auth_key'];
+                        $mail = checkApiToken($db, $api_key, $auth_key);
+                        if($mail != false){
+                            $request = "SELECT prenom FROM users WHERE mail = :mail";
+                            $stmt = $db->prepare($request);
+                            $stmt->bindParam(':mail', $mail, PDO::PARAM_STR);
+                            $stmt->execute();
+                            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                            echo json_encode($data);
+                        }else{
+                            header($_SERVER['SERVER_PROTOCOL'] . ' 401 Unauthorized');                       
+                        }
+                        
+                    }else{
+                        header($_SERVER['SERVER_PROTOCOL'] . ' 400 Bad Request');
+                    }
+                }catch (PDOException $e) {
+                    header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error');
                 }
-            } else {
-                header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
-                echo "false";
-            }
-        } else if ($id == "deleteproduct" && $param == NULL) {
-            header($_SERVER["SERVER_PROTOCOL"] . " 201 OK");
-            $api_key = $_POST['api_key'];
-            $auth_key = $_POST['auth_key'];
-            $mail = checkApiToken($db, $api_key, $auth_key);
-            $id_product = $_POST['id_product'];
-            if ($mail != false) {
-                $request = "DELETE FROM contient where id = $id_product";
-                $data = dbRequest($db, $request);
-                echo json_encode($data);
-            } else {
-                header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
-                echo "false";
-            }
-        } else if ($id == "account" && $param == NULL) {
-            header($_SERVER["SERVER_PROTOCOL"] . " 201 OK");
-            $api_key = $_POST['api_key'];
-            $auth_key = $_POST['auth_key'];
-            $mail = checkApiToken($db, $api_key, $auth_key);
-            if ($mail != false) {
-                $request = "SELECT commandes.date, commandes.numero, etat.type, commandes.id_type  FROM commandes
-                INNER JOIN etat ON etat.id_type = commandes.id_type
-                WHERE commandes.mail = :mail and commandes.id_type != 1 
-                ORDER BY commandes.date DESC";
-                $smtp = $db->prepare($request);
-                $smtp->bindParam(':mail', $mail, PDO::PARAM_STR);
-                $smtp->execute();
-                $data = $smtp->fetchAll(PDO::FETCH_ASSOC);
-                echo json_encode($data);
-            } else {
-                header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
-                echo "false";
-            }
-        } else if ($id == "deleteProduct" && $param == NULL) {
-            $api_key = $_POST['api_key'];
-            $auth_key = $_POST['auth_key'];
-            $mail = checkApiToken($db, $api_key, $auth_key);
-            $id_product = $_POST['id_product'];
-            if ($mail != false) {
-                $request = "DELETE FROM contient WHERE id = :id_product AND numero = ( SELECT numero FROM commandes WHERE mail = :mail AND id_type = 1);";
-                $smtp = $db->prepare($request);
-                $smtp->bindParam(':id_product', $id_product, PDO::PARAM_STR);
-                $smtp->bindParam(':mail', $mail, PDO::PARAM_STR);
-                $smtp->execute();
-                $data = $smtp->fetchAll(PDO::FETCH_ASSOC);
-                echo json_encode("true");
-            } else {
-                header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
-                echo "false";
-            }
-        } else if ($id == "updateProduct" && $param == NULL) {
-            $api_key = $_POST['api_key'];
-            $auth_key = $_POST['auth_key'];
-            $mail = checkApiToken($db, $api_key, $auth_key);
-            $id_product = $_POST['id_product'];
-            $nb_product = $_POST['quantite'];
-            if ($mail != false) {
-                $request = "UPDATE contient SET quantite = :nb_product WHERE id = :id_product AND numero = ( SELECT numero FROM commandes WHERE mail = :mail AND id_type = 1);";
-                $smtp = $db->prepare($request);
-                $smtp->bindParam(':id_product', $id_product, PDO::PARAM_STR);
-                $smtp->bindParam(':mail', $mail, PDO::PARAM_STR);
-                $smtp->bindParam(':nb_product', $nb_product, PDO::PARAM_STR);
-                $smtp->execute();
-                $data = $smtp->fetchAll(PDO::FETCH_ASSOC);
-                echo json_encode("true");
-            } else {
-                header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
-                echo "false";
-            }
-        } else if ($id == "simpleconnexion" && $param == NULL) {
-            $mail = $_POST['mail'];
-            $token = createApiToken($db, $mail);
-            //si une commande existe la mettre en annulé
-            $request = "SELECT numero FROM commandes WHERE mail = '$mail' AND id_type = 1";
-            $data = dbRequest($db, $request);
-            if ($data != NULL) {
-                $request = "UPDATE commandes SET id_type = 5 WHERE numero = " . $data[0]['numero'];
-                dbRequest($db, $request);
-            }
+                break;
+            
+            case 'pricecommande':
+                try{
+                    if(isset($_POST['api_key']) && isset($_POST['auth_key'])){
+                        $api_key = $_POST['api_key'];
+                        $auth_key = $_POST['auth_key'];
+                        $mail = checkApiToken($db, $api_key, $auth_key);
+                        if($mail != false){
+                            $request = "SELECT SUM(co.quantite * p.prix) AS prix_total FROM commandes c
+                            JOIN contient co ON co.numero = c.numero
+                            JOIN produits p ON p.id = co.id
+                            WHERE mail = :mail AND c.id_type = 1";
+                            $stmt = $db->prepare($request);
+                            $stmt->bindParam(':mail', $mail, PDO::PARAM_STR);
+                            $stmt->execute();
+                            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                            echo json_encode($data);
+                        }else{
+                            header($_SERVER['SERVER_PROTOCOL'] . ' 401 Unauthorized');                       
+                        }                   
+                    }else{
+                        header($_SERVER['SERVER_PROTOCOL'] . ' 400 Bad Request');
+                    }
+                }catch (PDOException $e) {
+                    header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error');
+                }
+                break;
+            
+            case 'nbinproduct' :
+                try{
+                    if(isset($_POST['api_key']) && isset($_POST['auth_key']) && isset($_POST['id_product'])){
+                        $api_key = $_POST['api_key'];
+                        $auth_key = $_POST['auth_key'];
+                        $id_product = $_POST['id_product'];
+                        $mail = checkApiToken($db, $api_key, $auth_key);
+                        if($mail != false){
+                            $request = "SELECT co.quantite FROM commandes c
+                            JOIN contient co ON co.numero = c.numero
+                            JOIN produits p ON p.id = co.id
+                            WHERE mail = :mail AND c.id_type = 1 AND p.id = :idproduct";
+                            $stmt = $db->prepare($request);
+                            $stmt->bindParam(':idproduct', $id_product, PDO::PARAM_INT);
+                            $stmt->bindParam(':mail', $mail, PDO::PARAM_STR);
+                            $stmt->execute();
+                            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                            echo json_encode($data);
+                        }else{
+                            header($_SERVER['SERVER_PROTOCOL'] . ' 401 Unauthorized');                       
+                        }                   
+                    }else{
+                        header($_SERVER['SERVER_PROTOCOL'] . ' 400 Bad Request');
+                    }
+                }catch (PDOException $e) {
+                    header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error');
+                }
+                break;
 
-            //creation d'une commande
-            $date = date("Y-m-d H:i:s");
-            $request = "INSERT INTO commandes (mail, id_type, date,numero) VALUES (:mail, 1, :date , NULL)";
-            $stmt = $db->prepare($request);
-            $stmt->bindParam(':mail', $mail, PDO::PARAM_STR);
-            $stmt->bindParam(':date', $date, PDO::PARAM_STR);
-            $stmt->execute();
+            case 'commande' : 
+                try{
+                    if(isset($_POST['api_key']) && isset($_POST['auth_key'])){
+                        $api_key = $_POST['api_key'];
+                        $auth_key = $_POST['auth_key'];
+                        $mail = checkApiToken($db, $api_key, $auth_key);
+                        if($mail != false){
+                            $request = "UPDATE commandes SET id_type = 2
+                            WHERE mail = :mail AND id_type = 1";
+                            $stmt = $db->prepare($request);
+                            $stmt->bindParam(':mail', $mail, PDO::PARAM_STR);
+                            $stmt->execute();
+                            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                            echo json_encode($data);
+                        }else{
+                            header($_SERVER['SERVER_PROTOCOL'] . ' 401 Unauthorized');                       
+                        }                   
+                    }else{
+                        header($_SERVER['SERVER_PROTOCOL'] . ' 400 Bad Request');
+                    }
+                }catch (PDOException $e) {
+                    header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error');
+                }
+                break;
 
-            // on renvoie le token et son id
-            echo json_encode(array('api_key' => $token['api_key'], 'auth_key' => $token['auth_key'], 'expires' => $token['expires']));
-            header($_SERVER['SERVER_PROTOCOL'] . ' 200 OK');
+            case 'annuler' : 
+                try{
+                    if(isset($_POST['api_key']) && isset($_POST['auth_key'])){
+                        $api_key = $_POST['api_key'];
+                        $auth_key = $_POST['auth_key'];
+                        $mail = checkApiToken($db, $api_key, $auth_key);
+                        if($mail != false){
+                            $request = "UPDATE commandes SET id_type = 5
+                            WHERE mail = :mail AND id_type = 1";
+                            $stmt = $db->prepare($request);
+                            $stmt->bindParam(':mail', $mail, PDO::PARAM_STR);
+                            $stmt->execute();
+                            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                            echo json_encode($data);
+                        }else{
+                            header($_SERVER['SERVER_PROTOCOL'] . ' 401 Unauthorized');                       
+                        }                   
+                    }else{
+                        header($_SERVER['SERVER_PROTOCOL'] . ' 400 Bad Request');
+                    }
+                }catch (PDOException $e) {
+                    header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error');
+                }
+                break;
+
+            case 'infocommande' :
+                try{
+                    if(isset($_POST['api_key']) && isset($_POST['auth_key'])){
+                        $api_key = $_POST['api_key'];
+                        $auth_key = $_POST['auth_key'];
+                        $mail = checkApiToken($db, $api_key, $auth_key);
+                        if($mail != false){
+                            $request = "SELECT contient.id, contient.quantite, produits.nom, produits.quantite as 'quantite_total' ,
+                            produits.prix,produits.image,produits.poids FROM `commandes` 
+                            INNER JOIN contient ON contient.numero = commandes.numero 
+                            INNER JOIN produits ON produits.id = contient.id 
+                            WHERE commandes.mail = :mail AND commandes.id_type = 1;";
+                            $smtp = $db->prepare($request);
+                            $smtp->bindParam(':mail', $mail, PDO::PARAM_STR);
+                            $smtp->execute();
+                            $data = $smtp->fetchAll(PDO::FETCH_ASSOC);
+                            echo json_encode($data);
+                        }else{
+                            header($_SERVER['SERVER_PROTOCOL'] . ' 401 Unauthorized');                       
+                        }                   
+                    }else{
+                        header($_SERVER['SERVER_PROTOCOL'] . ' 400 Bad Request');
+                    }
+                }catch (PDOException $e) {
+                    header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error');
+                }
+                break;
+
+            case 'addproduct':
+                try{
+                    if(isset($_POST['api_key']) && isset($_POST['auth_key']) && isset($_POST['id_product']) && isset($_POST['nb_product'])){
+                        $api_key = $_POST['api_key'];
+                        $auth_key = $_POST['auth_key'];
+                        $id_product = $_POST['id_product'];
+                        $nb_product = $_POST['nb_product'];
+                        $mail = checkApiToken($db, $api_key, $auth_key);
+                        if($mail != false){
+                            $request = "SELECT co.numero, co.quantite FROM commandes c
+                            JOIN contient co ON co.numero = c.numero
+                            WHERE mail = '$mail' AND c.id_type = 1 AND co.id = $id_product";
+                            $data = dbRequest($db, $request);
+                            if ($data == null) {
+                                $request = "SELECT numero FROM commandes WHERE mail = '$mail' AND id_type = 1";
+                                $data = dbRequest($db, $request);
+                                $num_com = $data[0]['numero'];
+                                $request = "INSERT IGNORE INTO contient (id,numero,quantite) VALUES ($id_product,$num_com,$nb_product)";
+                                $data = dbRequest($db, $request);
+                                echo json_encode($data);
+                            } else {
+                                $num_com = $data[0]['numero'];
+                                $data = $data[0]['quantite'];
+                                $request = "UPDATE contient SET quantite = $nb_product WHERE numero = $num_com AND id = $id_product";
+                                $data = dbRequest($db, $request);
+                                echo json_encode($data);
+                            }
+
+                        }else{
+                            header($_SERVER['SERVER_PROTOCOL'] . ' 401 Unauthorized');                       
+                        }                   
+                    }else{
+                        header($_SERVER['SERVER_PROTOCOL'] . ' 400 Bad Request');
+                    }
+                }catch (PDOException $e) {
+                    header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error');
+                }
+                break;
+
+            case 'account':
+                try{
+                    if(isset($_POST['api_key']) && isset($_POST['auth_key'])){
+                        $api_key = $_POST['api_key'];
+                        $auth_key = $_POST['auth_key'];
+                        $mail = checkApiToken($db, $api_key, $auth_key);
+                        if($mail != false){
+                            $request = "SELECT commandes.date, commandes.numero, etat.type, commandes.id_type  FROM commandes
+                            INNER JOIN etat ON etat.id_type = commandes.id_type
+                            WHERE commandes.mail = :mail and commandes.id_type != 1 and commandes.id_type != 5
+                            ORDER BY commandes.date DESC";
+                            $smtp = $db->prepare($request);
+                            $smtp->bindParam(':mail', $mail, PDO::PARAM_STR);
+                            $smtp->execute();
+                            $data = $smtp->fetchAll(PDO::FETCH_ASSOC);
+                            echo json_encode($data);
+                        }else{
+                            header($_SERVER['SERVER_PROTOCOL'] . ' 401 Unauthorized');                       
+                        }                   
+                    }else{
+                        header($_SERVER['SERVER_PROTOCOL'] . ' 400 Bad Request');
+                    }
+                }catch (PDOException $e) {
+                    header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error');
+                }
+                break;
+
+            case 'deleteProduct' :
+                try{
+                    if(isset($_POST['api_key']) && isset($_POST['auth_key']) && isset($_POST['id_product'])){
+                        $api_key = $_POST['api_key'];
+                        $auth_key = $_POST['auth_key'];
+                        $id_product = $_POST['id_product'];
+                        $mail = checkApiToken($db, $api_key, $auth_key);
+                        if($mail != false){
+                            $request = "DELETE FROM contient WHERE id = :id_product AND numero = ( SELECT numero FROM commandes WHERE mail = :mail AND id_type = 1);";
+                            $smtp = $db->prepare($request);
+                            $smtp->bindParam(':id_product', $id_product, PDO::PARAM_STR);
+                            $smtp->bindParam(':mail', $mail, PDO::PARAM_STR);
+                            $smtp->execute();
+                            $data = $smtp->fetchAll(PDO::FETCH_ASSOC);
+                            echo json_encode("true");
+                        }else{
+                            header($_SERVER['SERVER_PROTOCOL'] . ' 401 Unauthorized');                       
+                        }                   
+                    }else{
+                        header($_SERVER['SERVER_PROTOCOL'] . ' 400 Bad Request');
+                    }
+                }catch (PDOException $e) {
+                    header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error');
+                }
+                break;
+
+            case 'updateProduct' :
+                try{
+                    if(isset($_POST['api_key']) && isset($_POST['auth_key']) && isset($_POST['id_product']) && isset($_POST['quantite'])){
+                        $api_key = $_POST['api_key'];
+                        $auth_key = $_POST['auth_key'];
+                        $id_product = $_POST['id_product'];
+                        $nb_product = $_POST['quantite'];
+                        $mail = checkApiToken($db, $api_key, $auth_key);
+                        if($mail != false){
+                            $request = "UPDATE contient SET quantite = :nb_product WHERE id = :id_product AND numero = ( SELECT numero FROM commandes WHERE mail = :mail AND id_type = 1);";
+                            $smtp = $db->prepare($request);
+                            $smtp->bindParam(':id_product', $id_product, PDO::PARAM_STR);
+                            $smtp->bindParam(':mail', $mail, PDO::PARAM_STR);
+                            $smtp->bindParam(':nb_product', $nb_product, PDO::PARAM_STR);
+                            $smtp->execute();
+                            $data = $smtp->fetchAll(PDO::FETCH_ASSOC);
+                            echo json_encode("true");
+                        }else{
+                            header($_SERVER['SERVER_PROTOCOL'] . ' 401 Unauthorized');                       
+                        }                   
+                    }else{
+                        header($_SERVER['SERVER_PROTOCOL'] . ' 400 Bad Request');
+                    }
+                }catch (PDOException $e) {
+                    header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error');
+                }
+                break;
+            
+                
+                case 'getInfoUser' :
+                    try{
+                        if(isset($_POST['api_key']) && isset($_POST['auth_key'])){
+                            $api_key = $_POST['api_key'];
+                            $auth_key = $_POST['auth_key'];
+                            $mail = checkApiToken($db, $api_key, $auth_key);
+                            if($mail != false){
+                                $request = "SELECT * FROM users WHERE mail = :mail";
+                                $smtp = $db->prepare($request);
+                                $smtp->bindParam(':mail', $mail, PDO::PARAM_STR);
+                                $smtp->execute();
+                                $data = $smtp->fetchAll(PDO::FETCH_ASSOC);
+                                echo json_encode($data);
+                            }else{
+                                header($_SERVER['SERVER_PROTOCOL'] . ' 401 Unauthorized');                       
+                            }                   
+                        }else{
+                            header($_SERVER['SERVER_PROTOCOL'] . ' 400 Bad Request');
+                        }
+                    }catch (PDOException $e) {
+                        header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error');
+                    }
+                    break;
+                    
+                    case 'changeInfoUser' :
+                        try{
+                            if(isset($_POST['api_key']) && isset($_POST['auth_key']) && isset($_POST['nom']) && isset($_POST['prenom']) && isset($_POST['adresse']) && isset($_POST['telephone']) && isset($_POST['age'])){
+                                $api_key = $_POST['api_key'];
+                    $auth_key = $_POST['auth_key'];
+                    $nom = $_POST['nom'];
+                    $prenom = $_POST['prenom'];
+                    $adresse = $_POST['adresse'];
+                    $telephone = $_POST['telephone'];
+                    $age = $_POST['age'];
+                    $mail = checkApiToken($db, $api_key, $auth_key);
+                    if($mail != false){
+                        $request = "UPDATE users SET nom = :nom, prenom = :prenom, adresse = :adresse, telephone = :telephone, age = :age WHERE mail = :mail";
+                        $smtp = $db->prepare($request);
+                        $smtp->bindParam(':mail', $mail, PDO::PARAM_STR);
+                        $smtp->bindParam(':nom', $nom, PDO::PARAM_STR);
+                        $smtp->bindParam(':prenom', $prenom, PDO::PARAM_STR);
+                        $smtp->bindParam(':adresse', $adresse, PDO::PARAM_STR);
+                        $smtp->bindParam(':telephone', $telephone, PDO::PARAM_STR);
+                        $smtp->bindParam(':age', $age, PDO::PARAM_STR);
+                        $smtp->execute();
+                        $data = $smtp->fetchAll(PDO::FETCH_ASSOC);
+                        echo json_encode("true");
+                    }else{
+                        header($_SERVER['SERVER_PROTOCOL'] . ' 401 Unauthorized');                       
+                    }                   
+                }else{
+                    header($_SERVER['SERVER_PROTOCOL'] . ' 400 Bad Request');
+                }
+            }catch (PDOException $e) {
+                header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error');
+            }
+            break;
+            
+            case 'simpleconnexion' : 
+                //supprimer ca avant la prod + supprimer le react(allaccount, la redirection dans namewebsite, le fichier scss)
+                try{
+                    if(isset($_POST['mail'])){
+                        $mail = $_POST['mail'];
+                        if($mail != false){
+                            $token = createApiToken($db, $mail);
+                            //si une commande existe la mettre en annulé
+                            $request = "SELECT numero FROM commandes WHERE mail = '$mail' AND id_type = 1";
+                            $data = dbRequest($db, $request);
+                            if ($data != NULL) {
+                                $request = "UPDATE commandes SET id_type = 5 WHERE numero = " . $data[0]['numero'];
+                                dbRequest($db, $request);
+                            }
+                            //creation d'une commande
+                            $date = date("Y-m-d H:i:s");
+                            $request = "INSERT INTO commandes (mail, id_type, date,numero) VALUES (:mail, 1, :date , NULL)";
+                            $stmt = $db->prepare($request);
+                            $stmt->bindParam(':mail', $mail, PDO::PARAM_STR);
+                            $stmt->bindParam(':date', $date, PDO::PARAM_STR);
+                            $stmt->execute();
+                            // on renvoie le token et son id
+                            echo json_encode(array('api_key' => $token['api_key'], 'auth_key' => $token['auth_key'], 'expires' => $token['expires']));
+                        }else{
+                            header($_SERVER['SERVER_PROTOCOL'] . ' 401 Unauthorized');                       
+                        }                   
+                    }else{
+                        header($_SERVER['SERVER_PROTOCOL'] . ' 400 Bad Request');
+                    }
+                }catch (PDOException $e) {
+                    header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error');
+                }
+                break;
         }
+     
     }
 }
 

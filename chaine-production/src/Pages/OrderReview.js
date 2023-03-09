@@ -26,13 +26,11 @@ const Account = () => {
       axios
         .post("http://projet.local/index/api/account", formdata)
         .then((response) => {
-          if (response.data !== false) {
-            setApi(response.data);
-          } else {
-            navigate("/signin");
-          }
+          setApi(response.data);
         })
-        .catch(() => {});
+        .catch((error) => {
+          if (error.response.status === 401) navigate("/signin");
+        });
     };
     fetchData();
     setAnimation(true);

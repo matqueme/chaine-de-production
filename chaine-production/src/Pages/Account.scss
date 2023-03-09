@@ -15,7 +15,7 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 40px;
+    margin-bottom: 15px;
   }
 }
 
@@ -23,32 +23,67 @@
   font-size: 16px;
   color: const.$black 1px solid;
   font-weight: const.$regular;
+  display: flex;
+  flex-direction: column;
+
+  button {
+    background-color: const.$blue;
+    color: const.$white;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 35px;
+    font-size: 16px;
+    font-weight: const.$regular;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    margin: 0 0 15px 0;
+    align-self: flex-start;
+    &:hover {
+      transform: scale(1.04);
+    }
+  }
 
   h4 {
     margin: 5px;
   }
 
   .horizontal {
+    align-content: stretch;
     display: flex;
     flex-direction: row;
     text-align: left;
-    gap: 100px;
-    margin-bottom: 15px;
-
+    align-items: center;
+    flex-wrap: wrap;
   }
-
   .vertical {
+    padding: 0 30px 10px 0;
     display: flex;
     flex-direction: column;
+    width: 40%;
+  }
+  //mettre .vertical a 100% si la largeur est trop petite
+  @media screen and (max-width: 600px) {
+    .vertical {
+      width: 100%;
+    }
   }
 
-  p {
-    width: 130%;
-    text-align: center;
+  input {
     background-color: const.$lightGray;
     border: const.$lightGray 2px solid;
     border-radius: 5px;
-    border-width: 0.5em;
+    padding: 10px;
+    font-size: 16px;
+    color: const.$black 1px solid;
+    font-weight: const.$regular;
+    margin: 5px 0 15px 0;
+    &:focus {
+      outline: none;
+      border: const.$blue 2px solid;
+      box-shadow: 0px 0px 4px 1px rgba(0, 49, 113, 0.5);
+      background-color: const.$white;
+    }
   }
 }
 

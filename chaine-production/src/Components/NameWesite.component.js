@@ -1,6 +1,14 @@
+import { useNavigate } from "react-router-dom";
+
 function NameWebsite() {
+  const navigate = useNavigate();
+
+  function allaccount() {
+    navigate("/allaccount");
+  }
+
   return (
-    <div className="nameWebsite">
+    <div className="nameWebsite" onClick={allaccount}>
       <svg
         id="Calque_1"
         data-name="Calque 1"

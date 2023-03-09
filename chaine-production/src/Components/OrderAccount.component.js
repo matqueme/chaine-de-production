@@ -26,7 +26,6 @@ function OrderAccount(props) {
         .get("http://projet.local/index/api/commande/" + props.numero_commande)
         .then((response) => {
           if (response.data !== false) {
-            console.log(response.data);
             if (response.data.length === 0) {
               setApi([]);
             } else if (response.data !== api) {
@@ -63,7 +62,7 @@ function OrderAccount(props) {
         </div>
       </div>
       <div className="status-order-infos">
-        <h2>Commande {props.numero_commande}:</h2>
+        <h2>Commande #{props.numero_commande}:</h2>
         {
           /*display la date en la convertissant en object sous la forme : Le 22/08 à 12h50*/
           props.date !== null ? (

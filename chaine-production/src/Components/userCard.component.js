@@ -13,7 +13,7 @@ const UserCard = (props) => {
         cookies.set("api_key", response.data.api_key, { path: "/" });
         cookies.set("auth_key", response.data.auth_key, { path: "/" });
         //Redirection vers la page d'accueil avec react router dom
-        navigate("/home");
+        navigate("/", { state: { from: "account" } });
       });
   };
 

@@ -21,15 +21,14 @@ function ModalOrder() {
       await axios
         .post("http://projet.local/index/api/infocommande", formdata)
         .then((response) => {
-          if (response.data === false) {
-            navigate("/signin");
-          } else {
-            let tabQuantite = [];
-            setApiData(response.data);
-            response.data.map((item) => tabQuantite.push(item.quantite));
-            setQuantite(tabQuantite);
-            setIsLoad(true);
-          }
+          let tabQuantite = [];
+          setApiData(response.data);
+          response.data.map((item) => tabQuantite.push(item.quantite));
+          setQuantite(tabQuantite);
+          setIsLoad(true);
+        })
+        .catch((error) => {
+          if (error.response.status === 401) navigate("/signin");
         });
     };
     fetchData();
@@ -61,10 +60,8 @@ function ModalOrder() {
 
     axios
       .post("http://projet.local/index/api/updateProduct", formdata)
-      .then((response) => {
-        if (response.data === false) {
-          navigate("/signin");
-        }
+      .catch((error) => {
+        if (error.response.status === 401) navigate("/signin");
       });
   }
 
@@ -81,10 +78,8 @@ function ModalOrder() {
 
     axios
       .post("http://projet.local/index/api/deleteProduct", formdata)
-      .then((response) => {
-        if (response.data === false) {
-          navigate("/signin");
-        }
+      .catch((error) => {
+        if (error.response.status === 401) navigate("/signin");
       });
   }
 
@@ -104,7 +99,7 @@ function ModalOrder() {
         formdata.append("api_key", cookies.get("api_key"));
         formdata.append("auth_key", cookies.get("auth_key"));
         axios.post("http://projet.local/index/api/commande", formdata);
-        navigate("/order");
+        navigate("/orderReview");
       }
     };
     fetchData();

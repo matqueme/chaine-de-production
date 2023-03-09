@@ -10,6 +10,7 @@ import animationData from "../Assets/verify.json";
 
 function Home() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [api, setApi] = useState([]);
   const [prenom, setPrenom] = useState("");
   const [price, setPrice] = useState("0");
@@ -36,22 +37,20 @@ function Home() {
         .then(
           axios.spread((data1, data2, data3) => {
             setApi(data1.data);
-            if (data2.data !== false || data3.data !== false) {
-              setPrenom(data2.data[0].prenom);
-              data3.data[0].prix_total !== null
-                ? setPrice(data3.data[0].prix_total)
-                : setPrice("0");
-            } else {
-              navigate("/signin");
-            }
+
+            setPrenom(data2.data[0].prenom);
+            data3.data[0].prix_total !== null
+              ? setPrice(data3.data[0].prix_total)
+              : setPrice("0");
           })
         )
-        .catch(() => {});
+        .catch((error) => {
+          if (error.response.status === 401) navigate("/signin");
+        });
     };
     fetchData();
   }, [navigate]);
 
-  const location = useLocation();
   //useeffect pour recuperer le changement de la variable d'url
   useEffect(() => {
     //recuperer les données de l'api
@@ -63,26 +62,28 @@ function Home() {
       axios
         .post("http://projet.local/index/api/pricecommande", formdata)
         .then((response) => {
-          if (response.data !== false) {
-            if (
-              response.data[0].prix_total !== null &&
-              response.data[0].prix_total !== price
-            ) {
-              response.data[0].prix_total > price &&
-                setModalText("Produit ajouté");
-              response.data[0].prix_total < price &&
-                setModalText("Commande modifiée");
-              setAnimation(true);
-              setAnimationfade(true);
-            }
-            response.data[0].prix_total !== null
-              ? setPrice(response.data[0].prix_total)
-              : setPrice("0");
-          } else {
-            navigate("/signin");
+          if (
+            response.data[0].prix_total !== null &&
+            response.data[0].prix_total !== price &&
+            location.state?.from !== "account"
+          ) {
+            response.data[0].prix_total > price &&
+              setModalText("Produit ajouté");
+            response.data[0].prix_total < price &&
+              setModalText("Commande modifiée");
+
+            setPrice(response.data[0].prix_total);
+
+            setAnimation(true);
+            setAnimationfade(true);
+          }
+          if (response.data[0].prix_total === null) {
+            setPrice("0");
           }
         })
-        .catch(() => {});
+        .catch((error) => {
+          if (error.response.status === 401) navigate("/signin");
+        });
     };
     fetchData();
   }, [location, navigate, price]);

@@ -43,9 +43,6 @@ function ModalProduit() {
         ])
         .then(
           axios.spread((data1, data2) => {
-            if (data1.data === false) {
-              navigate("/signin");
-            }
             setApiData(data1.data[0]);
             if (data2.data.length > 0) {
               setQuantite(data2.data[0].quantite);
@@ -54,7 +51,9 @@ function ModalProduit() {
             setIsLoaded(true);
           })
         )
-        .catch(() => {});
+        .catch((error) => {
+          if (error.response.status === 401) navigate("/signin");
+        });
     };
     fetchData();
   }, [param, navigate]);
@@ -86,7 +85,7 @@ function ModalProduit() {
       formdata.append("auth_key", cookies.get("auth_key"));
       formdata.append("id_product", param.id);
       axios
-        .post("http://projet.local/index/api/deleteproduct", formdata)
+        .post("http://projet.local/index/api/deleteProduct", formdata)
         .then((data) => {
           navigate("/");
         });
