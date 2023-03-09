@@ -22,7 +22,7 @@ const AllAccount = () => {
   const navigate = useNavigate();
 
   const retour = () => {
-    navigate("signin");
+    navigate("/signin");
   };
 
   return (
