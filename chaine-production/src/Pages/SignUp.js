@@ -106,7 +106,7 @@ const SignUp = () => {
             />
 
             <label htmlFor="passwordConfirmation">
-              Confirmer le mot de passe
+              Confirmez le mot de passe
             </label>
             <input
               type="password"

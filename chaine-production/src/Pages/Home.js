@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import ProductCard from "../Components/PoductCard.component";
 import "./Home.scss";
 import OrderBar from "../Components/OrderBar.component";
-import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Cookies from "universal-cookie";
 import Lottie from "lottie-react";
@@ -105,7 +105,7 @@ function Home() {
   return (
     <>
       <div className="home">
-        <ul>
+        {/*<ul>
           <li>
             <Link to="/signin">signin</Link>
           </li>
@@ -121,7 +121,7 @@ function Home() {
           <li>
             <Link to="/error">error</Link>
           </li>
-        </ul>
+  </ul>*/}
         <div className="home__container">
           <h2 className="first">Bonjour {prenom}, </h2>
           <svg
@@ -136,7 +136,7 @@ function Home() {
             <path d="M222.957 798.37q62.76-39.761 124.021-59.903Q408.239 718.326 480 718.326t133.761 20.38q62 20.381 124.282 59.664 43.522-54.24 61.663-108.153Q817.848 636.303 817.848 576q0-143.863-96.98-240.856-96.98-96.992-240.826-96.992t-240.868 96.992Q142.152 432.137 142.152 576q0 60.283 18.528 114.139 18.529 53.856 62.277 108.231Zm256.857-190.696q-58.569 0-98.409-40.045-39.84-40.044-39.84-98.456 0-58.412 40.026-98.39 40.026-39.979 98.595-39.979 58.569 0 98.409 40.165 39.84 40.164 39.84 98.576 0 58.412-40.026 98.27-40.026 39.859-98.595 39.859Zm-.219 374.304q-84.103 0-158.336-31.926-74.234-31.926-129.28-87.328-55.047-55.401-86.502-129.279-31.455-73.878-31.455-157.919 0-84.04 31.978-157.957 31.978-73.917 87.315-128.754 55.337-54.837 129.231-86.935 73.895-32.098 157.954-32.098 84.059 0 157.954 32.098 73.894 32.098 128.731 86.935 54.837 54.837 86.935 128.891 32.098 74.053 32.098 158.028 0 83.974-32.098 157.794-32.098 73.82-86.935 129.157-54.837 55.337-129.02 87.315-74.182 31.978-158.57 31.978Z" />
           </svg>
         </div>
-        <h2 className="second">Comment allez-vous ?</h2>
+        <h2 className="second">Qu'est-ce qui vous ferait plaisir ?</h2>
 
         <div className="product-container">
           {api.map((product) => (

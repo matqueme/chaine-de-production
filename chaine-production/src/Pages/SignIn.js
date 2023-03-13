@@ -26,7 +26,7 @@ const SignIn = () => {
           navigate("/");
         }
       })
-      .catch(() => {});
+      .catch(() => { });
   }, [navigate]);
 
   function connection(e) {
@@ -56,7 +56,7 @@ const SignIn = () => {
           setError("Identifiants incorrects");
         }
       })
-      .catch(() => {});
+      .catch(() => { });
   }
 
   return (
@@ -65,7 +65,7 @@ const SignIn = () => {
         <NameWebsite />
         <h2>Connexion</h2>
         <h3>
-          Entrez vos informations de connexion pour accéder a votre compte.
+          Entrez vos informations de connexion pour accéder à votre compte.
         </h3>
 
         <form onSubmit={connection}>

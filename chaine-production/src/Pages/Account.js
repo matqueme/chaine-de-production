@@ -57,7 +57,7 @@ const Account = () => {
       formdata.append("age", age);
       axios
         .post("http://projet.local/index/api/changeInfoUser", formdata)
-        .catch(() => {});
+        .catch(() => { });
     };
     fetchData();
   };

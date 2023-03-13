@@ -135,7 +135,7 @@ const Account = () => {
       >
         {animation && (
           <div className="lottie">
-            <h2>Commande validé</h2>
+            <h2>Commande validée</h2>
             <Lottie
               animationData={animationData}
               height={150}
@@ -153,8 +153,8 @@ const Account = () => {
       {showModal && (
         <div className={`lottie-wrapper`}>
           <div className="lottie">
-            <h2>Deconnexion</h2>
-            <p> Vous aller être déconnecter dans 10 secondes</p>
+            <h2>Déconnexion</h2>
+            <p> Vous aller être déconnecté dans 10 secondes</p>
 
             <button onClick={handleReactivate}>Continuer la visite</button>
           </div>
