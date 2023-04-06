@@ -51,7 +51,7 @@ function addUser($db, $mail, $nom, $prenom, $pwd, $adresse, $age, $telephone)
     $stmt->bindParam(':adresse', $adresse, PDO::PARAM_STR);
     $stmt->bindParam(':age', $age, PDO::PARAM_STR);
     $stmt->bindParam(':telephone', $telephone, PDO::PARAM_STR);
-    $stmt->bindParam(':pwd', $pwd, PDO::PARAM_STR);
+    $stmt->bindParam(':pwd', $pwd);
     $stmt->execute();
 }
 

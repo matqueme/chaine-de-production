@@ -56,7 +56,7 @@ function ModalOrder() {
     formdata.append("api_key", cookies.get("api_key"));
     formdata.append("auth_key", cookies.get("auth_key"));
     formdata.append("id_product", apiData[index].id);
-    formdata.append("quantite", e);
+    formdata.append("quantite", array[index]);
 
     axios
       .post("http://projet.local/index/api/updateProduct", formdata)
@@ -101,6 +101,21 @@ function ModalOrder() {
         axios.post("http://projet.local/index/api/commande", formdata);
         navigate("/orderReview");
       }
+    };
+    fetchData();
+  };
+
+  const annulerCommande = () => {
+    const fetchData = async () => {
+      let cookies = new Cookies();
+      let formdata = new FormData();
+      formdata.append("api_key", cookies.get("api_key"));
+      formdata.append("auth_key", cookies.get("auth_key"));
+      axios.post("http://projet.local/index/api/annuler", formdata);
+      //remove cookie
+      cookies.remove("api_key");
+      cookies.remove("auth_key");
+      navigate("/");
     };
     fetchData();
   };
@@ -154,7 +169,9 @@ function ModalOrder() {
             <p className="total">{total} €</p>
           </div>
           <div className="commandeButton">
-            <button className="annuler">Annuler la commande</button>
+            <button className="annuler" onClick={() => annulerCommande()}>
+              Annuler la commande
+            </button>
             <button className="ajouter" onClick={() => validationCommande()}>
               Commander
             </button>

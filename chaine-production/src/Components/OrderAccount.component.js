@@ -57,7 +57,7 @@ function OrderAccount(props) {
           <div className="circle3"></div>
         </div>
         <div className="status-text">
-          <p>Status : {props.status}</p>
+          <p>Statut : {props.status}</p>
           <p className="info-robot">{status_text[props.status_number]}</p>
         </div>
       </div>

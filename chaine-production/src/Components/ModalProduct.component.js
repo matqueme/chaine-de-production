@@ -59,6 +59,9 @@ function ModalProduit() {
   }, [param, navigate]);
 
   function addToOrder() {
+    if (quantite === 0) {
+      return;
+    }
     //fait une fonction asynchrone pour envoyer les données
     const fetchData = async () => {
       let cookies = new Cookies();

@@ -82,14 +82,13 @@ if ($requestRessource == "api") {
         switch ($id) {
             case 'addUser':
                 try {
-                    $mail = filter_input(INPUT_POST, 'mail', FILTER_SANITIZE_EMAIL);
-                    $nom = filter_input(INPUT_POST, 'nom', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-                    $prenom = filter_input(INPUT_POST, 'prenom', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-                    $pwd = password_hash(filter_input(INPUT_POST, 'pwd', FILTER_SANITIZE_SPECIAL_CHARS), PASSWORD_DEFAULT);
-                    $adresse = filter_input(INPUT_POST, 'adresse', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-                    $age = filter_input(INPUT_POST, 'age', FILTER_SANITIZE_NUMBER_INT);
-                    $telephone = filter_input(INPUT_POST, 'telephone', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-
+                    $mail = $_POST['mail'];
+                    $nom = $_POST['nom'];
+                    $prenom = $_POST['prenom'];
+                    $pwd = $_POST['pwd'];
+                    $adresse = $_POST['adresse'];
+                    $age = $_POST['age'];
+                    $telephone = $_POST['telephone'];
                     addUser($db,  $mail, $nom, $prenom, $pwd, $adresse, $age, $telephone);
                     header($_SERVER["SERVER_PROTOCOL"] . " 201 Created");
                     echo "success";
@@ -102,7 +101,7 @@ if ($requestRessource == "api") {
             case 'connection':
                 try {
 
-                    $mail = filter_var($_POST['mail'], FILTER_SANITIZE_EMAIL);
+                    $mail = $_POST['mail'];
                     $password = $_POST['password'];
 
                     if (checkPassword($db, $mail, $password)) {
@@ -243,6 +242,17 @@ if ($requestRessource == "api") {
                         $auth_key = $_POST['auth_key'];
                         $mail = checkApiToken($db, $api_key, $auth_key);
                         if($mail != false){
+                            $request = "UPDATE produits p
+                            INNER JOIN contient c ON p.id = c.id
+                            INNER JOIN commandes o ON c.numero = o.numero
+                            SET p.quantite = p.quantite - c.quantite
+                            WHERE o.mail = :mail AND id_type = 1";
+
+                            $stmt = $db->prepare($request);
+                            $stmt->bindParam(':mail', $mail, PDO::PARAM_STR);
+                            $stmt->execute();
+                            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                            
                             $request = "UPDATE commandes SET id_type = 2
                             WHERE mail = :mail AND id_type = 1";
                             $stmt = $db->prepare($request);
@@ -250,6 +260,7 @@ if ($requestRessource == "api") {
                             $stmt->execute();
                             $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             echo json_encode($data);
+                       
                         }else{
                             header($_SERVER['SERVER_PROTOCOL'] . ' 401 Unauthorized');                       
                         }                   

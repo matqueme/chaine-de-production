@@ -27,7 +27,6 @@
   flex-direction: column;
 
   button {
-
     background-color: const.$blue;
     color: const.$white;
     border: none;
@@ -43,7 +42,6 @@
 
     &:hover {
       transform: scale(1.04);
-
     }
   }
 
