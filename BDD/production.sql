@@ -7,7 +7,7 @@
 # Table: produit
 #------------------------------------------------------------
 
-CREATE TABLE produit(
+CREATE TABLE produits(
         id          Int  Auto_increment  NOT NULL ,
         nom         Varchar (200) NOT NULL ,
         quantite    Int ,
@@ -52,7 +52,7 @@ CREATE TABLE etat(
 # Table: commande
 #------------------------------------------------------------
 
-CREATE TABLE commande(
+CREATE TABLE commandes(
         numero  Int  Auto_increment  NOT NULL ,
         date    Datetime ,
         mail    Varchar (150) NOT NULL ,
@@ -61,6 +61,21 @@ CREATE TABLE commande(
 
 	,CONSTRAINT commande_users_FK FOREIGN KEY (mail) REFERENCES users(mail)
 	,CONSTRAINT commande_etat0_FK FOREIGN KEY (id_type) REFERENCES etat(id_type)
+)ENGINE=InnoDB;
+
+
+#------------------------------------------------------------
+# Table: auth
+#------------------------------------------------------------
+
+CREATE TABLE auth(
+        api_key Varchar (255) NOT NULL ,
+        token   Varchar (255) NOT NULL ,
+        expiry  Int NOT NULL ,
+        mail    Varchar (150) NOT NULL
+	,CONSTRAINT auth_PK PRIMARY KEY (api_key,token)
+
+	,CONSTRAINT auth_users_FK FOREIGN KEY (mail) REFERENCES users(mail)
 )ENGINE=InnoDB;
 
 
