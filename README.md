@@ -1,7 +1,8 @@
 # Titre de votre projet
 Interface de commande de produits sous forme de borne de commande
 
-![Logo](https://user-images.githubusercontent.com/101797214/230504591-06e27538-32e4-4a11-afa8-72c8587925b4.png)
+![Logo](https://user-images.githubusercontent.com/101797214/230505590-badea913-1474-4eff-9d4c-bbfa7c4c86e0.png)
+
 
 ## Comment l'utiliser
 ```
@@ -36,7 +37,7 @@ Les technologies utilisées dans ce projet sont les suivantes :
 <img src="https://user-images.githubusercontent.com/101797214/230504744-99124880-3330-4403-8634-aea0fd2e57c6.png" width="23%"></img> 
 <img src="https://user-images.githubusercontent.com/101797214/230504748-6065a034-2717-4d5c-b0b5-24e5e684f10e.png" width="23%"></img> 
 <img src="https://user-images.githubusercontent.com/101797214/230504750-f120428a-168b-42d4-92d3-e2ba1d30fa00.png" width="23%"></img> 
-Et d'autre page encore
+- Et d'autre page encore
 
 ## Auteurs
 - Léo Gauthier
