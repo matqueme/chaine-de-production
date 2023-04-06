@@ -1,8 +1,7 @@
 # Titre de votre projet
 Interface de commande de produits sous forme de borne de commande
 
-![Logo](https://user-images.githubusercontent.com/101797214/230505590-badea913-1474-4eff-9d4c-bbfa7c4c86e0.png)
-
+![Logo](https://user-images.githubusercontent.com/101797214/230506047-69d7f9d0-3295-4dd3-babe-ee42d2981202.png)
 
 ## Comment l'utiliser
 ```
