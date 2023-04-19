@@ -1,5 +1,6 @@
-# Titre de votre projet
-Interface de commande de produits sous forme de borne de commande
+# Borne de commande - Chaine de production nouvelle génération
+Interface de commande de produits sous forme de borne de commande faisant partie d'un regroupement de 3 projets.
+Celui-ci correspondant au deuxième. Les autres était un backend et une IA permettant de scanner les produits de la chaine de porduction.
 
 ![Logo](https://user-images.githubusercontent.com/101797214/230506047-69d7f9d0-3295-4dd3-babe-ee42d2981202.png)
 
